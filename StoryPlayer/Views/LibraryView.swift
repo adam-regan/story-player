@@ -14,7 +14,7 @@ struct LibraryView: View {
             ZStack {
                 Color.theme.contentBackground
                     .ignoresSafeArea()
-                VStack {
+                VStack(spacing: 0) {
                     HStack {
                         Image(systemName: "book.pages")
                         Text("Library")
@@ -24,8 +24,18 @@ struct LibraryView: View {
                     .frame(height: 50)
                     .frame(maxWidth: .infinity)
                     .background(Color.theme.headerBackgroundColor)
-                    StoryListView()
-                    Spacer()
+                    ScrollView {
+                        StoryListView()
+                        StoryListView()
+                        StoryListView()
+                        StoryListView()
+                        StoryListView()
+                        StoryListView()
+                        StoryListView()
+                        StoryListView()
+                        StoryListView()
+                        Spacer()
+                    }
                 }
                 VStack {
                     Color.theme.pallete1.ignoresSafeArea(edges: .top)
