@@ -14,6 +14,8 @@ extension Color {
 struct ColorTheme {
     let companyColor = Color("CompanyColor")
     let companyText = Color("CompanyTextColor")
+    let contentBackground = Color("ContentBackgroundColor")
+    let headerBackgroundColor = Color("HeaderBackgroundColor")
     let pallete1 = Color("Pallete1Color")
     let pallete2 = Color("Pallete2Color")
     let pallete3 = Color("Pallete3Color")

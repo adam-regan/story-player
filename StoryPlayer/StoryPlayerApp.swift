@@ -11,7 +11,7 @@ import SwiftUI
 struct StoryPlayerApp: App {
     var body: some Scene {
         WindowGroup {
-            LoadingView()
+            RootView()
         }
     }
 }
