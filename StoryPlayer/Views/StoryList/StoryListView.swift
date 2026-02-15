@@ -11,14 +11,16 @@ struct StoryListView: View {
     @EnvironmentObject var viewModel: StoriesViewModel
     let columns = [GridItem(.fixed(StoryCardView.size.height), spacing: 0)]
     var body: some View {
-        NavigationStack {
+        if viewModel.stories.count > 0 {
             ScrollView(.horizontal) {
                 LazyHGrid(rows: columns) {
-                    ForEach($viewModel.stories) { story in
+                    Color.clear.frame(width: Spacing.md)
+                    ForEach(viewModel.stories) { story in
                         NavigationLink(destination: StoryDetailView(story: story)) {
                             StoryCardView(story: story)
                         }.buttonStyle(.plain)
                     }
+                    Color.clear.frame(width: Spacing.md)
                 }
             }
             .scrollIndicators(.hidden)
@@ -28,6 +30,8 @@ struct StoryListView: View {
 }
 
 #Preview {
-    StoryListView()
-        .environmentObject(StoriesViewModel())
+    NavigationStack {
+        StoryListView()
+            .environmentObject(StoriesViewModel())
+    }
 }

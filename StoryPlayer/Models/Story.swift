@@ -14,6 +14,7 @@ struct Story: Identifiable, Codable {
     var author: String
     var imageUrl: String
     var url: String
+    var isFavorite: Bool = false
 }
 
 #if DEBUG
