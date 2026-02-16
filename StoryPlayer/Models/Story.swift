@@ -20,12 +20,12 @@ struct Story: Identifiable, Codable {
 #if DEBUG
 extension Story {
     static let testData: [Story] = [
-        Story(title: "Little Red Riding Hood", description: "A young girl is chased by a cunning wolf", author: "Horace E. Scudder", imageUrl: "little-red-riding-hood", url: "./Resources/Audio/little-red-riding-hood"),
-        Story(title: "The Emperors New Clothes", description: "", author: "Hans Christian Andersen", imageUrl: "emperors-new-clothes", url: "./Resources/Audio/emperors-new-clothes"),
-        Story(title: "The Little Mermaid", description: "", author: "Hans Christian Andersen", imageUrl: "little-mermaid", url: "./Resources/Audio/little-mermaid"),
-        Story(title: "Little Red Riding Hood", description: "A young girl is chased by a cunning wolf", author: "Horace E. Scudder", imageUrl: "little-red-riding-hood", url: "./Resources/Audio/little-red-riding-hood"),
-        Story(title: "The Emperors New Clothes", description: "", author: "Hans Christian Andersen", imageUrl: "emperors-new-clothes", url: "./Resources/Audio/emperors-new-clothes"),
-        Story(title: "The Little Mermaid", description: "", author: "Hans Christian Andersen", imageUrl: "little-mermaid", url: "./Resources/Audio/little-mermaid")
+        Story(title: "Little Red Riding Hood", description: "A young girl is chased by a cunning wolf", author: "Horace E. Scudder", imageUrl: "little-red-riding-hood", url: "little-red-riding-hood"),
+        Story(title: "The Emperors New Clothes", description: "", author: "Hans Christian Andersen", imageUrl: "emperors-new-clothes", url: "emperors-new-clothes"),
+        Story(title: "The Little Mermaid", description: "", author: "Hans Christian Andersen", imageUrl: "little-mermaid", url: "little-mermaid"),
+        Story(title: "Little Red Riding Hood", description: "A young girl is chased by a cunning wolf", author: "Horace E. Scudder", imageUrl: "little-red-riding-hood", url: "little-red-riding-hood"),
+        Story(title: "The Emperors New Clothes", description: "", author: "Hans Christian Andersen", imageUrl: "emperors-new-clothes", url: "emperors-new-clothes"),
+        Story(title: "The Little Mermaid", description: "", author: "Hans Christian Andersen", imageUrl: "little-mermaid", url: "little-mermaid")
     ]
 }
 #endif
