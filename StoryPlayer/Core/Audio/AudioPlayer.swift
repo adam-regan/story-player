@@ -52,7 +52,6 @@ class AudioPlayer: ObservableObject {
 
     private(set) var state: AudioPlayerState = .idle {
         didSet {
-            print("adam\(state)")
             delegate?.audioPlayer(self, didChangeState: state)
         }
     }
