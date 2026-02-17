@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct StoryDetailView: View {
+    @EnvironmentObject var audioViewModel: AudioViewModel
     @Environment(\.dismiss) private var dismiss
     var story: Story
 
@@ -48,8 +49,27 @@ struct StoryDetailView: View {
                             }
                             Spacer()
                         }
+                        HStack {
+                            let isPlaying = audioViewModel.isPlaying && audioViewModel.isCurrentStory(story)
+
+                            Button(action: {
+                                if isPlaying {
+                                    audioViewModel.pause()
+                                } else {
+                                    audioViewModel.play(story: story)
+                                }
+                            }) {
+                                Image(systemName: "\(isPlaying ? "pause" : "play").circle.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 30)
+                            }
+                            Spacer()
+                        }
+                        .padding(.vertical, Spacing.sm)
                     }
                     .padding(.horizontal, Spacing.lg)
+                    .disabled(audioViewModel.isLoading)
                 }
             }
             Spacer()
@@ -63,4 +83,5 @@ struct StoryDetailView: View {
     NavigationStack {
         StoryDetailView(story: Story.testData[0])
     }
+    .environmentObject(AudioViewModel(audioPlayer: .init()))
 }

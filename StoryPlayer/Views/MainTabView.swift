@@ -8,17 +8,23 @@
 import SwiftUI
 
 struct MainTabView: View {
+    @StateObject private var audioViewModel: AudioViewModel = .init(audioPlayer: .init())
     var body: some View {
         TabView {
             LibraryView()
                 .tabItem {
                     Label("Library", systemImage: "book.pages")
                 }
+            AudioPlayerView()
+                .tabItem {
+                    Label("Player", systemImage: "play.circle.fill")
+                }
             SettingsView()
                 .tabItem {
                     Label("Settings", systemImage: "gearshape")
                 }
         }
+        .environmentObject(audioViewModel)
     }
 }
 
