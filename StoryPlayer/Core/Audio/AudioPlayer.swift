@@ -8,7 +8,16 @@
 import AVFoundation
 import Foundation
 
-enum AudioPlayerState {
+enum AudioPlayerState: Equatable {
+    static func == (lhs: AudioPlayerState, rhs: AudioPlayerState) -> Bool {
+        switch (lhs, rhs) {
+        case (.idle, .idle), (.loading, .loading),
+             (.playing, .playing), (.paused, .paused),
+             (.stopped, .stopped), (.error, .error): return true
+        default: return false
+        }
+    }
+
     case idle
     case loading
     case playing
@@ -19,28 +28,32 @@ enum AudioPlayerState {
 
 protocol AudioPlayerDelegate: AnyObject {
     func audioPlayer(_ player: AudioPlayer, didChangeState state: AudioPlayerState)
+    func audioPlayer(_ player: AudioPlayer, didChangeDuration duration: TimeInterval)
+    func audioPlayer(_ player: AudioPlayer, didChangeCurrentTime currentTime: TimeInterval)
 }
 
 class AudioPlayer: ObservableObject {
     weak var delegate: AudioPlayerDelegate?
     private var player: AVPlayer?
+    private var timeObserver: Any?
     private var itemObservation: NSKeyValueObservation?
     private var playWhenReady = false
+    private(set) var currentTime: TimeInterval = 0 {
+        didSet {
+            delegate?.audioPlayer(self, didChangeCurrentTime: currentTime)
+        }
+    }
+
+    private(set) var duration: TimeInterval = 0 {
+        didSet {
+            delegate?.audioPlayer(self, didChangeDuration: duration)
+        }
+    }
+
     private(set) var state: AudioPlayerState = .idle {
         didSet {
             delegate?.audioPlayer(self, didChangeState: state)
         }
-    }
-
-    var currentTime: TimeInterval {
-        guard let player = player else { return 0 }
-        return CMTimeGetSeconds(player.currentTime())
-    }
-
-    var duration: TimeInterval {
-        guard let player = player,
-              let duration = player.currentItem?.duration else { return 0 }
-        return CMTimeGetSeconds(duration)
     }
 
     var isPlaying: Bool {
@@ -76,6 +89,8 @@ class AudioPlayer: ObservableObject {
                 switch item.status {
                 case .readyToPlay:
                     self?.state = .stopped
+                    let seconds = CMTimeGetSeconds(item.duration)
+                    self?.duration = seconds.isFinite ? seconds : 0
                     if self?.playWhenReady == true {
                         self?.play()
                         self?.playWhenReady = false
@@ -89,7 +104,12 @@ class AudioPlayer: ObservableObject {
                 }
             }
         }
-        player = AVPlayer(playerItem: playerItem)
+        let avPlayer = AVPlayer(playerItem: playerItem)
+        timeObserver = avPlayer.addPeriodicTimeObserver(forInterval: CMTime(seconds: 1, preferredTimescale: 600), queue: .main) { [weak self] time in
+            let seconds = CMTimeGetSeconds(time)
+            self?.currentTime = seconds.isFinite ? seconds : 0
+        }
+        player = avPlayer
     }
 
     func play() {
@@ -114,9 +134,14 @@ class AudioPlayer: ObservableObject {
     func clean() {
         if let player = player {
             player.pause()
+            if let timeObserver = timeObserver {
+                player.removeTimeObserver(timeObserver)
+                self.timeObserver = nil
+            }
         }
         itemObservation?.invalidate()
         itemObservation = nil
+        duration = 0
         playWhenReady = false
         player = nil
         state = .idle
