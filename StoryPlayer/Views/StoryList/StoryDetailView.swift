@@ -49,26 +49,26 @@ struct StoryDetailView: View {
                             }
                             Spacer()
                         }
+                        HStack {
+                            let isPlaying = audioViewModel.isPlaying && audioViewModel.isCurrentStory(story)
+
+                            Button(action: {
+                                if isPlaying {
+                                    audioViewModel.pause()
+                                } else {
+                                    audioViewModel.play(story: story)
+                                }
+                            }) {
+                                Image(systemName: "\(isPlaying ? "pause" : "play").circle.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 30)
+                            }
+                            Spacer()
+                        }
+                        .padding(.vertical, Spacing.sm)
                     }
                     .padding(.horizontal, Spacing.lg)
-                    VStack {
-                        let isPlaying = audioViewModel.isPlaying && audioViewModel.isCurrentStory(story)
-
-                        Button(action: {
-                            if isPlaying {
-                                audioViewModel.pause()
-                            } else {
-                                audioViewModel.play(story: story)
-                            }
-                        }) {
-                            Image(systemName: "\(isPlaying ? "pause" : "play").circle.fill")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 80, height: 50)
-                        }
-                        Text("Duration: \(audioViewModel.formattedDuration)")
-                        Text("Current Time: \(audioViewModel.formattedCurrentTime)")
-                    }
                     .disabled(audioViewModel.isLoading)
                 }
             }

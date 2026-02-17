@@ -11,19 +11,31 @@ import Foundation
 class AudioViewModel: ObservableObject, AudioPlayerDelegate {
     @Published private(set) var isLoading: Bool = false
     @Published private(set) var isPlaying: Bool = false
+    @Published private(set) var isDisabled: Bool = true
     @Published private(set) var errorMessage: String?
     @Published private(set) var currentStory: Story?
     @Published private(set) var currentTime: TimeInterval = 0
     @Published private(set) var duration: TimeInterval = 0
 
+    let emptyFormattedTime: String = "-:--"
+
     private let audioPlayer: AudioPlayer
 
-    var formattedDuration: String {
-        Duration.seconds(duration).formatted(.time(pattern: .minuteSecond))
+    var timePercentage: Double {
+        guard duration > 0 else { return 0 }
+        return min(currentTime / duration, 1.0)
     }
-    
+
+    var formattedDurationRemaining: String {
+        formatTime(duration - currentTime)
+    }
+
+    var formattedDuration: String {
+        formatTime(duration)
+    }
+
     var formattedCurrentTime: String {
-        Duration.seconds(currentTime).formatted(.time(pattern: .minuteSecond))
+        formatTime(currentTime)
     }
 
     init(audioPlayer: AudioPlayer) {
@@ -55,15 +67,23 @@ class AudioViewModel: ObservableObject, AudioPlayerDelegate {
             case .playing:
                 isLoading = false
                 isPlaying = true
-            case .paused, .stopped, .idle:
+                isDisabled = false
+            case .paused, .stopped:
                 isLoading = false
                 isPlaying = false
+                isDisabled = false
+            case .idle:
+                isLoading = false
+                isPlaying = false
+                isDisabled = true
             case .loading:
                 isLoading = true
                 isPlaying = false
+                isDisabled = true
             case .error(let error):
                 errorMessage = error.localizedDescription
                 isLoading = false
+                isDisabled = true
         }
     }
 
@@ -73,5 +93,10 @@ class AudioViewModel: ObservableObject, AudioPlayerDelegate {
 
     func audioPlayer(_ player: AudioPlayer, didChangeCurrentTime currentTime: TimeInterval) {
         self.currentTime = currentTime
+    }
+
+    private func formatTime(_ time: TimeInterval) -> String {
+        if duration == 0 { return emptyFormattedTime }
+        return Duration.seconds(time).formatted(.time(pattern: .minuteSecond))
     }
 }

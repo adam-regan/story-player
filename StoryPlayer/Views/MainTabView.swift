@@ -15,6 +15,10 @@ struct MainTabView: View {
                 .tabItem {
                     Label("Library", systemImage: "book.pages")
                 }
+            AudioPlayerView()
+                .tabItem {
+                    Label("Player", systemImage: "play.circle.fill")
+                }
             SettingsView()
                 .tabItem {
                     Label("Settings", systemImage: "gearshape")

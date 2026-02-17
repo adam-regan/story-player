@@ -52,6 +52,7 @@ class AudioPlayer: ObservableObject {
 
     private(set) var state: AudioPlayerState = .idle {
         didSet {
+            print("adam\(state)")
             delegate?.audioPlayer(self, didChangeState: state)
         }
     }
@@ -105,7 +106,7 @@ class AudioPlayer: ObservableObject {
             }
         }
         let avPlayer = AVPlayer(playerItem: playerItem)
-        timeObserver = avPlayer.addPeriodicTimeObserver(forInterval: CMTime(seconds: 1, preferredTimescale: 600), queue: .main) { [weak self] time in
+        timeObserver = avPlayer.addPeriodicTimeObserver(forInterval: CMTime(seconds: 0.5, preferredTimescale: 600), queue: .main) { [weak self] time in
             let seconds = CMTimeGetSeconds(time)
             self?.currentTime = seconds.isFinite ? seconds : 0
         }
