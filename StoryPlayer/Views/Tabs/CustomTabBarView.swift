@@ -12,28 +12,43 @@ enum Tabs {
 }
 
 struct CustomTabBarView: View {
+    @EnvironmentObject var audioViewModel: AudioViewModel
     @Binding var selectedTab: Tabs
+    @State private var audioPlayerOpen: Bool = false
 
     var body: some View {
-        VStack {
+        ZStack(alignment: .top) {
             HStack(alignment: .center) {
                 CustomTab(selectedTab: $selectedTab, label: "Library", imageSystemName: "book.pages", targetTab: .library)
                 CustomTab(selectedTab: $selectedTab, label: "Settings", imageSystemName: "gearshape", targetTab: .settings)
             }
+            .frame(height: 60)
             .frame(maxWidth: .infinity)
-            .overlay(alignment: .top) {
-                LinearGradient(
-                    colors: [.clear, Color.theme.contentBackground],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-                .frame(height: 15)
-                .offset(y: -15)
+            .background(Color.theme.contentBackground)
+            .ignoresSafeArea(edges: .bottom)
+
+            LinearGradient(
+                colors: [.clear, Color.theme.contentBackground],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .frame(height: 40)
+            .frame(maxWidth: .infinity)
+            .allowsHitTesting(false)
+            .offset(y: -40)
+
+            Button(action: {
+                audioPlayerOpen = true
+            }) {
+                Text("Temp open audio player")
             }
+            .buttonStyle(.borderedProminent)
+            .offset(y: -28)
+            .disabled(audioViewModel.isDisabled)
         }
-        .frame(height: 60)
-        .frame(maxWidth: .infinity)
-        .background(Color.theme.contentBackground).ignoresSafeArea(edges: .bottom)
+        .sheet(isPresented: $audioPlayerOpen) {
+            AudioPlayerView()
+        }
     }
 }
 
@@ -65,5 +80,5 @@ struct CustomTab: View {
 
 #Preview {
     @Previewable @State var selectedTab: Tabs = .library
-    CustomTabBarView(selectedTab: $selectedTab)
+    CustomTabBarView(selectedTab: $selectedTab).environmentObject(AudioViewModel(audioPlayer: .init()))
 }
