@@ -14,40 +14,34 @@ enum Tabs {
 struct CustomTabBarView: View {
     @EnvironmentObject var audioViewModel: AudioViewModel
     @Binding var selectedTab: Tabs
-    @State private var audioPlayerOpen: Bool = false
+    let tabBarHeight: CGFloat = 60
+    let gradientHeight: CGFloat = 28
 
     var body: some View {
-        ZStack(alignment: .top) {
-            HStack(alignment: .center) {
-                CustomTab(selectedTab: $selectedTab, label: "Library", imageSystemName: "book.pages", targetTab: .library)
-                CustomTab(selectedTab: $selectedTab, label: "Settings", imageSystemName: "gearshape", targetTab: .settings)
-            }
-            .frame(height: 60)
-            .frame(maxWidth: .infinity)
-            .background(Color.theme.contentBackground)
-            .ignoresSafeArea(edges: .bottom)
+        VStack {
+            Spacer()
+            ZStack(alignment: .top) {
+                HStack(alignment: .center) {
+                    CustomTab(selectedTab: $selectedTab, label: "Library", imageSystemName: "book.pages", targetTab: .library)
+                    CustomTab(selectedTab: $selectedTab, label: "Settings", imageSystemName: "gearshape", targetTab: .settings)
+                }
+                .frame(height: tabBarHeight)
+                .frame(maxWidth: .infinity)
+                .background(Color.theme.contentBackground)
+                .ignoresSafeArea(edges: .bottom)
 
-            LinearGradient(
-                colors: [.clear, Color.theme.contentBackground],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .frame(height: 40)
-            .frame(maxWidth: .infinity)
-            .allowsHitTesting(false)
-            .offset(y: -40)
-
-            Button(action: {
-                audioPlayerOpen = true
-            }) {
-                Text("Temp open audio player")
+                LinearGradient(
+                    colors: [.clear, Color.theme.contentBackground],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .frame(height: gradientHeight)
+                .frame(maxWidth: .infinity)
+                .offset(y: -gradientHeight)
+                MiniAudioPlayer()
+                    .offset(y: -MiniAudioPlayer.miniPlayerHeight)
             }
-            .buttonStyle(.borderedProminent)
-            .offset(y: -28)
-            .disabled(audioViewModel.isDisabled)
-        }
-        .sheet(isPresented: $audioPlayerOpen) {
-            AudioPlayerView()
+            
         }
     }
 }
@@ -80,5 +74,12 @@ struct CustomTab: View {
 
 #Preview {
     @Previewable @State var selectedTab: Tabs = .library
-    CustomTabBarView(selectedTab: $selectedTab).environmentObject(AudioViewModel(audioPlayer: .init()))
+    ZStack {
+        Color.theme.companyColor.ignoresSafeArea()
+        VStack {
+            Spacer()
+            CustomTabBarView(selectedTab: $selectedTab)
+                .environmentObject(AudioViewModel(audioPlayer: .init()))
+        }
+    }
 }

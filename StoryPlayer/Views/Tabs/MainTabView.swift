@@ -19,10 +19,7 @@ struct MainTabView: View {
                 case .settings:
                     SettingsView()
             }
-            VStack {
-                Spacer()
-                CustomTabBarView(selectedTab: $selectedTab)
-            }
+            CustomTabBarView(selectedTab: $selectedTab)
         }
         .environmentObject(audioViewModel)
     }
