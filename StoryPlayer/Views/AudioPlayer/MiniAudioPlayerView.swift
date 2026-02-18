@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MiniAudioPlayer: View {
+struct MiniAudioPlayerView: View {
     @EnvironmentObject var audioViewModel: AudioViewModel
     static let miniPlayerHeight: CGFloat = 50
     @State private var audioPlayerOpen: Bool = false
@@ -17,7 +17,7 @@ struct MiniAudioPlayer: View {
             Rectangle()
                 .fill(Color.theme.contentBackground)
                 .frame(maxWidth: .infinity)
-                .frame(height: MiniAudioPlayer.miniPlayerHeight)
+                .frame(height: MiniAudioPlayerView.miniPlayerHeight)
                 .cornerRadius(Radius.md)
                 .shadow(color: Color.black.opacity(0.2), radius: 8)
             HStack {
@@ -64,7 +64,7 @@ struct MiniAudioPlayer: View {
             }
             .padding(Spacing.md)
         }
-        .frame(height: MiniAudioPlayer.miniPlayerHeight)
+        .frame(height: MiniAudioPlayerView.miniPlayerHeight)
         .padding(.horizontal, Spacing.md)
         .fullScreenCover(isPresented: $audioPlayerOpen) {
             AudioPlayerView()
@@ -73,5 +73,5 @@ struct MiniAudioPlayer: View {
 }
 
 #Preview {
-    MiniAudioPlayer().environmentObject(AudioViewModel(audioPlayer: .init()))
+    MiniAudioPlayerView().environmentObject(AudioViewModel(audioPlayer: .init()))
 }
