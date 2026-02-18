@@ -38,8 +38,8 @@ struct CustomTabBarView: View {
                 .frame(height: gradientHeight)
                 .frame(maxWidth: .infinity)
                 .offset(y: -gradientHeight)
-                MiniAudioPlayer()
-                    .offset(y: -MiniAudioPlayer.miniPlayerHeight)
+                MiniAudioPlayerView()
+                    .offset(y: -MiniAudioPlayerView.miniPlayerHeight)
             }
             
         }

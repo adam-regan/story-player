@@ -21,7 +21,7 @@ class AudioViewModel: ObservableObject, AudioPlayerDelegate {
 
     private let audioPlayer: AudioPlayer
 
-    var timePercentage: Double {
+    var timePercentage: CGFloat {
         guard duration > 0 else { return 0 }
         return min(currentTime / duration, 1.0)
     }
@@ -68,6 +68,10 @@ class AudioViewModel: ObservableObject, AudioPlayerDelegate {
         } else {
             audioPlayer.changeTimeBySeconds(seconds)
         }
+    }
+    
+    func scrubTime(percentage: Double) {
+        audioPlayer.changeTimePercentage(percentage)
     }
 
     func audioPlayer(_ player: AudioPlayer, didChangeState state: AudioPlayerState) {

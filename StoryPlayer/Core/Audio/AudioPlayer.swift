@@ -133,6 +133,13 @@ class AudioPlayer: ObservableObject {
         player.seek(to: newTimeAsCMTime)
     }
 
+    func changeTimePercentage(_ percentage: CGFloat) {
+        guard let player, duration > 0, percentage >= 0, percentage <= 1 else { return }
+        let newTime = duration * percentage
+        let newTimeAsCMTime = CMTime(seconds: newTime, preferredTimescale: 600)
+        player.seek(to: newTimeAsCMTime)
+    }
+
     func pause() {
         guard let player = player else { return }
         playWhenReady = false
