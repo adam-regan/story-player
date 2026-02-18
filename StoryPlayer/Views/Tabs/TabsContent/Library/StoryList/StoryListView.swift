@@ -33,5 +33,6 @@ struct StoryListView: View {
     NavigationStack {
         StoryListView()
             .environmentObject(StoriesViewModel())
+            .environmentObject(AudioViewModel(audioPlayer: .init()))
     }
 }

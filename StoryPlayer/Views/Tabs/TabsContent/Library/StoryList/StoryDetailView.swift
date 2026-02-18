@@ -30,12 +30,38 @@ struct StoryDetailView: View {
                         Color.theme.pallete4
                             .frame(maxWidth: .infinity)
                             .frame(height: 250)
-                        Image(story.imageUrl)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(maxWidth: 200)
-                            .clipped()
-                            .cornerRadius(Radius.md)
+                        ZStack {
+                            Image(story.imageUrl)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(maxWidth: 200)
+                                .clipped()
+                                .cornerRadius(Radius.md)
+                            VStack {
+                                Spacer()
+                                HStack {
+                                    Spacer()
+                                    let isPlaying = audioViewModel.isPlaying && audioViewModel.isCurrentStory(story)
+
+                                    Button(action: {
+                                        if isPlaying {
+                                            audioViewModel.pause()
+                                        } else {
+                                            audioViewModel.play(story: story)
+                                        }
+                                    }) {
+                                        Image(systemName: "\(isPlaying ? "pause" : "play").circle.fill")
+                                            .resizable()
+                                            .foregroundStyle(Color.theme.pallete1, Color.theme.contentBackground)
+                                            .scaledToFit()
+                                            .frame(width: 36)
+                                            .shadow(color: Color.black.opacity(0.5), radius: 4)
+                                    }
+                                }
+                            }
+                            .padding(Spacing.sm)
+                        }
+                        .frame(maxWidth: 200)
                     }
                     VStack {
                         HStack {
@@ -49,24 +75,6 @@ struct StoryDetailView: View {
                             }
                             Spacer()
                         }
-                        HStack {
-                            let isPlaying = audioViewModel.isPlaying && audioViewModel.isCurrentStory(story)
-
-                            Button(action: {
-                                if isPlaying {
-                                    audioViewModel.pause()
-                                } else {
-                                    audioViewModel.play(story: story)
-                                }
-                            }) {
-                                Image(systemName: "\(isPlaying ? "pause" : "play").circle.fill")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 30)
-                            }
-                            Spacer()
-                        }
-                        .padding(.vertical, Spacing.sm)
                     }
                     .padding(.horizontal, Spacing.lg)
                     .disabled(audioViewModel.isLoading)

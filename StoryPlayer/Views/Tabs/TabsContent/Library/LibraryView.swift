@@ -50,5 +50,5 @@ struct LibraryView: View {
 }
 
 #Preview {
-    LibraryView()
+    LibraryView().environmentObject(AudioViewModel(audioPlayer: .init()))
 }
