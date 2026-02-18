@@ -66,7 +66,7 @@ struct MiniAudioPlayer: View {
         }
         .frame(height: MiniAudioPlayer.miniPlayerHeight)
         .padding(.horizontal, Spacing.md)
-        .sheet(isPresented: $audioPlayerOpen) {
+        .fullScreenCover(isPresented: $audioPlayerOpen) {
             AudioPlayerView()
         }
     }

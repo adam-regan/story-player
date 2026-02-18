@@ -17,7 +17,7 @@ class AudioViewModel: ObservableObject, AudioPlayerDelegate {
     @Published private(set) var currentTime: TimeInterval = 0
     @Published private(set) var duration: TimeInterval = 0
 
-    let emptyFormattedTime: String = "-:--"
+    let emptyFormattedTime: String = ""
 
     private let audioPlayer: AudioPlayer
 
@@ -60,6 +60,14 @@ class AudioViewModel: ObservableObject, AudioPlayerDelegate {
 
     func pause() {
         audioPlayer.pause()
+    }
+
+    func changeTimeBySeconds(_ seconds: TimeInterval) {
+        if seconds < 0 {
+            audioPlayer.changeTimeBySeconds(abs(seconds), decrement: true)
+        } else {
+            audioPlayer.changeTimeBySeconds(seconds)
+        }
     }
 
     func audioPlayer(_ player: AudioPlayer, didChangeState state: AudioPlayerState) {

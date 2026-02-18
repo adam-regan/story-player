@@ -125,8 +125,17 @@ class AudioPlayer: ObservableObject {
         state = .stopped
     }
 
+    func changeTimeBySeconds(_ seconds: Double, decrement: Bool = false) {
+        guard let player = player else { return }
+        let currentTime = CMTimeGetSeconds(player.currentTime())
+        let newTime = decrement ? max(0, currentTime - seconds) : min(duration, currentTime + seconds)
+        let newTimeAsCMTime = CMTime(seconds: newTime, preferredTimescale: 600)
+        player.seek(to: newTimeAsCMTime)
+    }
+
     func pause() {
         guard let player = player else { return }
+        playWhenReady = false
         player.pause()
         state = .paused
     }
