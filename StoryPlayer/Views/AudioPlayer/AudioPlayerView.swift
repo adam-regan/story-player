@@ -35,20 +35,31 @@ struct AudioPlayerView: View {
                         .buttonStyle(.plain)
                     }
                     .padding(.vertical, Spacing.md)
-                    ZStack {
+
+                    GeometryReader { geo in
+                        let circleDiameter: CGFloat = 12
+                        let barHeight: CGFloat = 4
+                        let barWidth = geo.size.width * audioViewModel.timePercentage
+
                         Rectangle()
                             .fill(Color.gray.opacity(0.3))
-                            .frame(height: 4)
+                            .frame(height: barHeight)
                             .cornerRadius(2)
+                            .overlay(alignment: .leading) {
+                                ZStack(alignment: .leading) {
+                                    Rectangle()
+                                        .fill(Color.theme.pallete1)
+                                        .frame(width: barWidth, height: barHeight)
+                                        .cornerRadius(2)
 
-                        GeometryReader { geo in
-                            Rectangle()
-                                .fill(Color.accentColor)
-                                .frame(width: geo.size.width * audioViewModel.timePercentage, height: 4)
-                                .cornerRadius(2)
-                        }
+                                    Circle()
+                                        .fill(Color.theme.pallete1)
+                                        .frame(width: circleDiameter, height: circleDiameter)
+                                        .offset(x: barWidth - circleDiameter / 2)
+                                }
+                            }
                     }
-                    .frame(height: 4)
+                    .frame(height: 12)
                     HStack {
                         Text(audioViewModel.formattedCurrentTime)
                         Spacer()
@@ -85,6 +96,7 @@ struct AudioPlayerView: View {
                 } else {
                     Text("Choose a story and come back!")
                         .font(.largeTitle)
+                        .foregroundStyle(Color.theme.headerBackgroundColor)
                         .multilineTextAlignment(.center)
                     Spacer()
                 }
