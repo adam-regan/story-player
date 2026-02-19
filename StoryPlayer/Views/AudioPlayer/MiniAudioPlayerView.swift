@@ -59,7 +59,7 @@ struct MiniAudioPlayerView: View {
                         .scaledToFit()
                         .frame(width: 24, height: 24)
                 }
-                .foregroundStyle(Color.theme.pallete2)
+                .foregroundStyle(Color.theme.palette2)
                 .buttonStyle(.plain)
             }
             .padding(Spacing.md)

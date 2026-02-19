@@ -34,12 +34,12 @@ struct ScrubbingBarView: View {
                     .overlay(alignment: .leading) {
                         ZStack(alignment: .leading) {
                             Rectangle()
-                                .fill(Color.theme.pallete1)
+                                .fill(Color.theme.palette1)
                                 .frame(width: barWidth, height: barHeight)
                                 .cornerRadius(2)
 
                             Circle()
-                                .fill(Color.theme.pallete1)
+                                .fill(Color.theme.palette1)
                                 .frame(width: circleDiameter, height: circleDiameter)
                                 .offset(x: barWidth - circleDiameter / 2)
                         }

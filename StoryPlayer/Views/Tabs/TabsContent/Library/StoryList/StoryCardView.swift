@@ -32,7 +32,7 @@ struct StoryCardView: View {
                     }) {
                         Image(systemName: "play.circle.fill")
                             .resizable()
-                            .foregroundStyle( Color.theme.pallete1,Color.theme.contentBackground)
+                            .foregroundStyle( Color.theme.palette1,Color.theme.contentBackground)
                             .scaledToFit()
                             .frame(width: 26)
                             .shadow(color: Color.black.opacity(0.6), radius: 4)
