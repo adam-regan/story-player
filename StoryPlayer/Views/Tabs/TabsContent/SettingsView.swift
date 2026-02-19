@@ -8,8 +8,12 @@
 import SwiftUI
 
 struct SettingsView: View {
+    @AppStorage("colorTheme") private var isDarkMode = false
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        TabContent(topColor: Color.theme.palette6, headerImageSystemName: "gear", headerTitle: "Settings") {
+            Toggle("Dark Mode", isOn: $isDarkMode)
+                .padding(Spacing.lg)
+        }
     }
 }
 
