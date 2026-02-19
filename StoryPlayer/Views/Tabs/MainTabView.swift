@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct MainTabView: View {
+    @AppStorage("colorTheme") private var isDarkMode = false
     @StateObject private var audioViewModel: AudioViewModel = .init(audioPlayer: .init())
     @State private var selectedTab: Tabs = .library
 
@@ -22,6 +23,7 @@ struct MainTabView: View {
             CustomTabBarView(selectedTab: $selectedTab)
         }
         .environmentObject(audioViewModel)
+        .preferredColorScheme(isDarkMode ? .dark : .light)
     }
 }
 

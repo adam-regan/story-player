@@ -12,36 +12,44 @@ enum Tabs {
 }
 
 struct CustomTabBarView: View {
+    @Environment(\.colorScheme) private var colorScheme
     @EnvironmentObject var audioViewModel: AudioViewModel
     @Binding var selectedTab: Tabs
-    let tabBarHeight: CGFloat = 60
     let gradientHeight: CGFloat = 28
+    let tabContainerHeight: (light: CGFloat, dark: CGFloat) = (light: 60, dark: 120)
 
     var body: some View {
         VStack {
             Spacer()
-            ZStack(alignment: .top) {
-                HStack(alignment: .center) {
-                    CustomTab(selectedTab: $selectedTab, label: "Library", imageSystemName: "book.pages", targetTab: .library)
-                    CustomTab(selectedTab: $selectedTab, label: "Settings", imageSystemName: "gearshape", targetTab: .settings)
+            ZStack {
+                VStack(spacing: 0) {
+                    Spacer()
+                    if colorScheme == .light {
+                        LinearGradient(
+                            colors: [.clear, Color.theme.tabBarBackground],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                        .frame(height: gradientHeight)
+                        .frame(maxWidth: .infinity)
+                        .offset(y: 0)
+                    }
+                    HStack(alignment: .center) {
+                        CustomTab(selectedTab: $selectedTab, label: "Library", imageSystemName: "book.pages", targetTab: .library)
+                        CustomTab(selectedTab: $selectedTab, label: "Settings", imageSystemName: "gearshape", targetTab: .settings)
+                    }
+                    .frame(height: colorScheme == .light ? tabContainerHeight.light : tabContainerHeight.dark)
+                    .frame(maxWidth: .infinity)
+                    .background(Color.theme.tabBarBackground)
+                    .ignoresSafeArea(edges: .bottom)
                 }
-                .frame(height: tabBarHeight)
-                .frame(maxWidth: .infinity)
-                .background(Color.theme.contentBackground)
-                .ignoresSafeArea(edges: .bottom)
-
-                LinearGradient(
-                    colors: [.clear, Color.theme.contentBackground],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-                .frame(height: gradientHeight)
-                .frame(maxWidth: .infinity)
-                .offset(y: -gradientHeight)
-                MiniAudioPlayerView()
-                    .offset(y: -MiniAudioPlayerView.miniPlayerHeight)
+                VStack {
+                    Spacer()
+                    MiniAudioPlayerView()
+                        .offset(y: -tabContainerHeight.light)
+                }
             }
-            
+            .frame(maxHeight: .infinity)
         }
     }
 }
@@ -72,14 +80,26 @@ struct CustomTab: View {
     }
 }
 
-#Preview {
-    @Previewable @State var selectedTab: Tabs = .library
-    ZStack {
-        Color.theme.companyColor.ignoresSafeArea()
-        VStack {
-            Spacer()
-            CustomTabBarView(selectedTab: $selectedTab)
-                .environmentObject(AudioViewModel(audioPlayer: .init()))
+private struct TabBarPreview: View {
+    @State private var selectedTab: Tabs = .library
+
+    var body: some View {
+        ZStack {
+            Color.theme.companyColor.ignoresSafeArea()
+            VStack {
+                Spacer()
+                CustomTabBarView(selectedTab: $selectedTab)
+                    .environmentObject(AudioViewModel(audioPlayer: .init()))
+            }
         }
     }
+}
+
+#Preview(".light") {
+    TabBarPreview()
+}
+
+#Preview(".dark") {
+    TabBarPreview()
+        .preferredColorScheme(.dark)
 }

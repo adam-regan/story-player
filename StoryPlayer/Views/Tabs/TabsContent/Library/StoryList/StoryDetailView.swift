@@ -23,11 +23,11 @@ struct StoryDetailView: View {
             }
             .padding(.horizontal, Spacing.xl)
             .padding(.vertical, Spacing.md)
-            .background(Color.theme.pallete4)
+            .background(Color.theme.palette4)
             ScrollView {
                 VStack {
                     ZStack(alignment: .top) {
-                        Color.theme.pallete4
+                        Color.theme.palette4
                             .frame(maxWidth: .infinity)
                             .frame(height: 250)
                         ZStack {
@@ -52,7 +52,7 @@ struct StoryDetailView: View {
                                     }) {
                                         Image(systemName: "\(isPlaying ? "pause" : "play").circle.fill")
                                             .resizable()
-                                            .foregroundStyle(Color.theme.pallete1, Color.theme.contentBackground)
+                                            .foregroundStyle(Color.theme.palette1, Color.theme.contentBackground)
                                             .scaledToFit()
                                             .frame(width: 36)
                                             .shadow(color: Color.black.opacity(0.5), radius: 4)
