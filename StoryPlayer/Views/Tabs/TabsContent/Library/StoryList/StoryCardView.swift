@@ -9,8 +9,15 @@ import SwiftUI
 
 struct StoryCardView: View {
     @EnvironmentObject var audioViewModel: AudioViewModel
+    @Environment(\.storyListType) var listType
 
-    static let size = CGSize(width: 130, height: 195)
+    static func size(for listType: StoryListType) -> CGSize {
+        switch listType {
+        case .horizontal: CGSize(width: 130, height: 195)
+        case .grid: CGSize(width: 110, height: 165)
+        }
+    }
+
     let story: Story
 
     var body: some View {
@@ -32,7 +39,7 @@ struct StoryCardView: View {
                     }) {
                         Image(systemName: "play.circle.fill")
                             .resizable()
-                            .foregroundStyle( Color.theme.palette1,Color.theme.contentBackground)
+                            .foregroundStyle(Color.theme.palette1, Color.theme.contentBackground)
                             .scaledToFit()
                             .frame(width: 26)
                             .shadow(color: Color.black.opacity(0.6), radius: 4)
@@ -41,10 +48,11 @@ struct StoryCardView: View {
             }
             .padding(Spacing.sm)
         }
-        .frame(width: StoryCardView.size.width, height: StoryCardView.size.height)
+        .frame(width: StoryCardView.size(for: listType).width, height: StoryCardView.size(for: listType).height)
     }
 }
 
 #Preview {
     StoryCardView(story: Story.testData[0]).environmentObject(AudioViewModel(audioPlayer: .init()))
+        .environment(\.storyListType, .horizontal)
 }
