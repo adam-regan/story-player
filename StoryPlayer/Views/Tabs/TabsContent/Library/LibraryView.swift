@@ -8,21 +8,19 @@
 import SwiftUI
 
 struct LibraryView: View {
-    @StateObject var viewModel = StoriesViewModel()
+    @StateObject var viewModel = StoriesViewModel(filter: .all, storiesRepository: StoriesRepository())
     var body: some View {
         TabContent(topColor: Color.theme.palette1, headerImageSystemName: "book.pages", headerTitle: "Library") {
             ScrollView {
-                StoryListView()
-                StoryListView()
-                StoryListView()
-                StoryListView()
-                StoryListView()
-                StoryListView()
-                StoryListView()
-                StoryListView()
-                StoryListView()
+                StoryListView(viewModel: StoriesViewModel(filter: .favorites, storiesRepository: StoriesRepository()), title: "Favourites")
+                    .environment(\.storyListType, .horizontal)
+                StoryListView(viewModel: StoriesViewModel(filter: .all, storiesRepository: StoriesRepository()), title: "Browse")
+                    .environment(\.storyListType, .grid)
+                StoryListView(viewModel: StoriesViewModel(filter: .all, storiesRepository: StoriesRepository()), title: "For You")
+                    .environment(\.storyListType, .horizontal)
                 Spacer()
             }
+            .padding(.vertical, Spacing.sm)
         }
         .environmentObject(viewModel)
     }

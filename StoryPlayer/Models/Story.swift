@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Story: Identifiable, Codable {
+struct Story: Identifiable, Codable, Equatable {
     var id = UUID()
     var title: String
     var description: String
@@ -23,9 +23,9 @@ extension Story {
         Story(title: "Little Red Riding Hood", description: "A young girl is chased by a cunning wolf", author: "Charles Perrault", imageUrl: "little-red-riding-hood", url: "little-red-riding-hood"),
         Story(title: "The Emperors New Clothes", description: "", author: "Hans Christian Andersen", imageUrl: "emperors-new-clothes", url: "emperors-new-clothes"),
         Story(title: "The Little Mermaid", description: "", author: "Hans Christian Andersen", imageUrl: "little-mermaid", url: "little-mermaid"),
-        Story(title: "Little Red Riding Hood", description: "A young girl is chased by a cunning wolf", author: "Charles Perrault", imageUrl: "little-red-riding-hood", url: "little-red-riding-hood"),
+        Story(title: "The Little Mermaid", description: "", author: "Hans Christian Andersen", imageUrl: "little-mermaid", url: "little-mermaid", isFavorite: true),
         Story(title: "The Emperors New Clothes", description: "", author: "Hans Christian Andersen", imageUrl: "emperors-new-clothes", url: "emperors-new-clothes"),
-        Story(title: "The Little Mermaid", description: "", author: "Hans Christian Andersen", imageUrl: "little-mermaid", url: "little-mermaid")
+        Story(title: "Little Red Riding Hood", description: "A young girl is chased by a cunning wolf", author: "Charles Perrault", imageUrl: "little-red-riding-hood", url: "little-red-riding-hood")
     ]
 }
 #endif
