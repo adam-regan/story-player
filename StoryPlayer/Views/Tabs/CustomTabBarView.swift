@@ -16,7 +16,7 @@ struct CustomTabBarView: View {
     @EnvironmentObject var audioViewModel: AudioViewModel
     @Binding var selectedTab: Tabs
     let gradientHeight: CGFloat = 28
-    let tabContainerHeight: (light: CGFloat, dark: CGFloat) = (light: 60, dark: 120)
+    static let tabContainerHeight: (light: CGFloat, dark: CGFloat) = (light: 60, dark: 120)
 
     var body: some View {
         VStack {
@@ -38,7 +38,7 @@ struct CustomTabBarView: View {
                         CustomTab(selectedTab: $selectedTab, label: "Library", imageSystemName: "book.pages", targetTab: .library)
                         CustomTab(selectedTab: $selectedTab, label: "Settings", imageSystemName: "gearshape", targetTab: .settings)
                     }
-                    .frame(height: colorScheme == .light ? tabContainerHeight.light : tabContainerHeight.dark)
+                    .frame(height: colorScheme == .light ? CustomTabBarView.tabContainerHeight.light : CustomTabBarView.tabContainerHeight.dark)
                     .frame(maxWidth: .infinity)
                     .background(Color.theme.tabBarBackground)
                     .ignoresSafeArea(edges: .bottom)
@@ -46,7 +46,7 @@ struct CustomTabBarView: View {
                 VStack {
                     Spacer()
                     MiniAudioPlayerView()
-                        .offset(y: -tabContainerHeight.light)
+                        .offset(y: -CustomTabBarView.tabContainerHeight.light)
                 }
             }
             .frame(maxHeight: .infinity)

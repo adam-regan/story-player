@@ -13,6 +13,10 @@ class StoriesViewModel: ObservableObject {
     private let storiesRepository: StoriesRepositoryProtocol
     private let filter: Filter
 
+    var changesAfterFetch: Bool {
+        filter == .favorites
+    }
+
     enum Filter {
         case all, favorites
     }
@@ -22,10 +26,27 @@ class StoriesViewModel: ObservableObject {
         self.storiesRepository = storiesRepository
     }
 
+    func makeStoryDetailViewModel(for story: Story) -> StoryDetailViewModel {
+        let favoriteAction: StoryDetailViewModel.Action = { [weak self] newValue in
+            try await newValue ? self?.storiesRepository.favorite(story) : self?.storiesRepository.unfavorite(story)
+
+            guard case .loaded(let stories) = self?.stories else { return }
+            var newStories = stories
+            guard let i = newStories.firstIndex(of: story) else { return }
+            newStories[i].isFavorite = newValue
+            self?.stories = .loaded(newStories)
+        }
+        return StoryDetailViewModel(
+            story: story,
+            favoriteAction: favoriteAction
+        )
+    }
+
     func fetchStories() {
         Task {
             do {
-                switch filter {
+                stories = .loading
+                switch self.filter {
                 case .all:
                     self.stories = try .loaded(await self.storiesRepository.fetchStories())
                 case .favorites:

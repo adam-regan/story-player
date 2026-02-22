@@ -8,4 +8,6 @@
 protocol StoriesRepositoryProtocol {
     func fetchStories() async throws -> [Story]
     func fetchFavoriteStories() async throws -> [Story]
+    func favorite(_ story: Story) async throws
+    func unfavorite(_ story: Story) async throws
 }

@@ -17,7 +17,7 @@ struct LoadingListView: View {
 }
 
 #Preview("Horizontal") {
-    StoryListContent {
+    StoryListContent(title: "Browse") {
         LoadingListView()
     }
     .environment(\.storyListType, .horizontal)
@@ -25,7 +25,7 @@ struct LoadingListView: View {
 }
 
 #Preview("Grid") {
-    StoryListContent {
+    StoryListContent(title: "Browse") {
         LoadingListView()
     }
     .environment(\.storyListType, .grid)

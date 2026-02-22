@@ -8,49 +8,50 @@
 import SwiftUI
 
 struct StoryListView: View {
-    @StateObject var viewModel: StoriesViewModel
+    @EnvironmentObject var viewModel: StoriesViewModel
     var title: String
     @Environment(\.storyListType) var listType
 
     var body: some View {
         VStack {
-            HStack {
-                Text(title)
-                    .font(.title)
-                    .bold()
-                Spacer()
-            }
-            .padding(.horizontal, Spacing.md)
             switch viewModel.stories {
-                case .loading:
-                    StoryListContent {
-                        LoadingListView()
+            case .loading:
+                StoryListContent(title: title) {
+                    LoadingListView()
+                }
+                .scrollDisabled(true)
+            case let .error(error):
+                Text(error.localizedDescription)
+            case .empty:
+                EmptyView()
+            case let .loaded(stories):
+                StoryListContent(title: title) {
+                    ForEach(stories) { story in
+                        NavigationLink(destination: StoryDetailView(viewModel: viewModel.makeStoryDetailViewModel(for: story))) {
+                            StoryCardView(story: story)
+                        }.buttonStyle(.plain)
                     }
-                    .scrollDisabled(true)
-                case let .error(error):
-                    Text(error.localizedDescription)
-                case .empty:
-                    EmptyView()
-                case let .loaded(stories):
-                    StoryListContent {
-                        ForEach(stories) { story in
-                            NavigationLink(destination: StoryDetailView(story: story)) {
-                                StoryCardView(story: story)
-                            }.buttonStyle(.plain)
-                        }
-                    }
-                    .scrollIndicators(.hidden)
+                }
+                .scrollIndicators(.hidden)
             }
         }
         .onAppear {
-            viewModel.fetchStories()
+            switch viewModel.stories {
+            case .loaded:
+                if viewModel.changesAfterFetch {
+                    viewModel.fetchStories()
+                }
+            case .loading, .error:
+                viewModel.fetchStories()
+            }
         }
     }
 }
 
 #Preview {
     NavigationStack {
-        StoryListView(viewModel: StoriesViewModel(filter: .all, storiesRepository: StoriesRepository()), title: "Browse Stories")
+        StoryListView(title: "Browse Stories")
+            .environmentObject(StoriesViewModel(filter: .all, storiesRepository: StoriesRepository()))
             .environmentObject(AudioViewModel(audioPlayer: .init()))
             .environment(\.storyListType, .grid)
     }
