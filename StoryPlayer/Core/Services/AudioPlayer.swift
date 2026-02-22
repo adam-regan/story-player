@@ -44,6 +44,8 @@ class AudioPlayer: ObservableObject {
         }
     }
 
+    private var interruptionObserver: NSObjectProtocol?
+
     private(set) var duration: TimeInterval = 0 {
         didSet {
             delegate?.audioPlayer(self, didChangeDuration: duration)
@@ -65,6 +67,13 @@ class AudioPlayer: ObservableObject {
 
     init() {
         setupAudioSession()
+        setupInterruptionObserver()
+    }
+
+    deinit {
+        if let observer = interruptionObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
     }
 
     private func setupAudioSession() {
@@ -161,5 +170,53 @@ class AudioPlayer: ObservableObject {
         playWhenReady = false
         player = nil
         state = .idle
+    }
+
+    private func resume() {
+        do {
+            try AVAudioSession.sharedInstance().setActive(true)
+            play()
+        } catch {
+            print("Failed to reactivate audio session: \(error)")
+        }
+    }
+
+    private func handleInterruption(_ notification: Notification) {
+        guard
+            let info = notification.userInfo,
+            let typeValue = info[AVAudioSessionInterruptionTypeKey] as? UInt,
+            let type = AVAudioSession.InterruptionType(rawValue: typeValue)
+        else { return }
+
+        switch type {
+        case .began:
+            if case .playing = state {
+                state = .paused
+            }
+
+        case .ended:
+            guard
+                let optionsValue = info[AVAudioSessionInterruptionOptionKey] as? UInt
+            else { return }
+
+            let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
+
+            if options.contains(.shouldResume) {
+                resume()
+            }
+
+        @unknown default:
+            break
+        }
+    }
+
+    private func setupInterruptionObserver() {
+        interruptionObserver = NotificationCenter.default.addObserver(
+            forName: AVAudioSession.interruptionNotification,
+            object: AVAudioSession.sharedInstance(),
+            queue: .main
+        ) { [weak self] notification in
+            self?.handleInterruption(notification)
+        }
     }
 }
