@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct TabContent<Content: View>: View {
+    @AppStorage("colorTheme") private var isDarkMode = false
+
     var topColor: Color
     var headerImageSystemName: String
     var headerTitle: String
@@ -29,8 +31,11 @@ struct TabContent<Content: View>: View {
                     .frame(maxWidth: .infinity)
                     .background(Color.theme.headerBackgroundColor)
                     content()
-                    Spacer()
+
+                    let colorHeight = (isDarkMode ? CustomTabBarView.tabContainerHeight.dark : CustomTabBarView.tabContainerHeight.light)
+                    Color.clear.frame(height: colorHeight)
                 }
+                .frame(maxHeight: .infinity, alignment: .top)
 
                 VStack {
                     topColor

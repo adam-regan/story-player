@@ -10,7 +10,7 @@ import SwiftUI
 struct StoryDetailView: View {
     @EnvironmentObject var audioViewModel: AudioViewModel
     @Environment(\.dismiss) private var dismiss
-    var story: Story
+    @StateObject var viewModel: StoryDetailViewModel
 
     var body: some View {
         VStack(spacing: 0) {
@@ -20,6 +20,10 @@ struct StoryDetailView: View {
                     .tint(.black)
                     .onTapGesture { dismiss() }
                 Spacer()
+                Image(systemName: "heart\(viewModel.isFavorite ? ".fill" : "")")
+                    .imageScale(.large)
+                    .tint(.black)
+                    .onTapGesture { viewModel.favoritePost() }
             }
             .padding(.horizontal, Spacing.xl)
             .padding(.vertical, Spacing.md)
@@ -31,7 +35,7 @@ struct StoryDetailView: View {
                             .frame(maxWidth: .infinity)
                             .frame(height: 250)
                         ZStack {
-                            Image(story.imageUrl)
+                            Image(viewModel.imageUrl)
                                 .resizable()
                                 .scaledToFit()
                                 .frame(maxWidth: 200)
@@ -41,13 +45,13 @@ struct StoryDetailView: View {
                                 Spacer()
                                 HStack {
                                     Spacer()
-                                    let isPlaying = audioViewModel.isPlaying && audioViewModel.isCurrentStory(story)
+                                    let isPlaying = audioViewModel.isPlaying && audioViewModel.isCurrentStory(viewModel.story)
 
                                     Button(action: {
                                         if isPlaying {
                                             audioViewModel.pause()
                                         } else {
-                                            audioViewModel.play(story: story)
+                                            audioViewModel.play(story: viewModel.story)
                                         }
                                     }) {
                                         Image(systemName: "\(isPlaying ? "pause" : "play").circle.fill")
@@ -66,11 +70,11 @@ struct StoryDetailView: View {
                     VStack {
                         HStack {
                             VStack(alignment: .leading) {
-                                Text(story.title)
+                                Text(viewModel.title)
                                     .font(.title)
                                     .bold()
                                     .padding(.bottom, Spacing.xs)
-                                Text("By \(story.author)")
+                                Text("By \(viewModel.author)")
                                     .font(.body)
                             }
                             Spacer()
@@ -89,7 +93,7 @@ struct StoryDetailView: View {
 
 #Preview {
     NavigationStack {
-        StoryDetailView(story: Story.testData[0])
+        StoryDetailView(viewModel: StoryDetailViewModel(story: Story.testData[3], favoriteAction: { _ in }))
     }
     .environmentObject(AudioViewModel(audioPlayer: .init()))
 }

@@ -13,9 +13,17 @@ enum StoryListType: Equatable {
 
 struct StoryListContent<Content: View>: View {
     @Environment(\.storyListType) var listType
+    var title: String
     @ViewBuilder let content: () -> Content
 
     var body: some View {
+        HStack {
+            Text(title)
+                .font(.title)
+                .bold()
+            Spacer()
+        }
+        .padding(.horizontal, Spacing.md)
         switch listType {
             case .horizontal:
                 let gridItem = GridItem(.fixed(StoryCardView.size(for: listType).height), spacing: 0)
@@ -45,14 +53,14 @@ struct StoryListContent<Content: View>: View {
 }
 
 #Preview("Horizontal") {
-    StoryListContent {
+    StoryListContent(title: "Browse") {
         LoadingListView()
     }
     .environment(\.storyListType, .horizontal)
 }
 
 #Preview("Grid") {
-    StoryListContent {
+    StoryListContent(title: "Browse") {
         LoadingListView()
     }
     .environment(\.storyListType, .grid)
