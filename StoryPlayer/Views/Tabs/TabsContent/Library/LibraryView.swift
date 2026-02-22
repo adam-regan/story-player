@@ -9,16 +9,17 @@ import SwiftUI
 
 struct LibraryView: View {
     var body: some View {
+        let storiesRepository = StoriesRepository()
         TabContent(topColor: Color.theme.palette1, headerImageSystemName: "book.pages", headerTitle: "Library") {
             ScrollView {
                 StoryListView(title: "Favourites")
-                    .environmentObject(StoriesViewModel(filter: .favorites, storiesRepository: StoriesRepository()))
+                    .environmentObject(StoriesViewModel(filter: .favorites, storiesRepository: storiesRepository))
                     .environment(\.storyListType, .horizontal)
                 StoryListView(title: "Browse")
-                    .environmentObject(StoriesViewModel(filter: .all, storiesRepository: StoriesRepository()))
+                    .environmentObject(StoriesViewModel(filter: .all, storiesRepository: storiesRepository))
                     .environment(\.storyListType, .grid)
                 StoryListView(title: "For You")
-                    .environmentObject(StoriesViewModel(filter: .all, storiesRepository: StoriesRepository()))
+                    .environmentObject(StoriesViewModel(filter: .all, storiesRepository: storiesRepository))
                     .environment(\.storyListType, .horizontal)
                 Spacer()
             }
