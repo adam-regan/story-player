@@ -27,7 +27,9 @@ enum Loadable<Value> {
 }
 
 extension Loadable where Value: RangeReplaceableCollection {
-    static var empty: Loadable<Value> { .loaded(Value()) }
+    static var empty: Loadable<Value> {
+        .loaded(Value())
+    }
 }
 
 extension Loadable: Equatable where Value: Equatable {
@@ -44,3 +46,27 @@ extension Loadable: Equatable where Value: Equatable {
         }
     }
 }
+
+#if DEBUG
+extension Loadable {
+    static var error: Loadable<Value> {
+        .error(PreviewError())
+    }
+
+    private struct PreviewError: LocalizedError {
+        let errorDescription: String? = "Lorem ipsum dolor set amet."
+    }
+
+    func simulate() async throws -> Value {
+        switch self {
+        case .loading:
+            try await Task.sleep(for: .seconds(10000000000))
+            fatalError("Timeout exceeded for “loading” case preview")
+        case let .error(error):
+            throw error
+        case let .loaded(value):
+            return value
+        }
+    }
+}
+#endif

@@ -53,7 +53,7 @@ class StoriesViewModel: ObservableObject {
                     self.stories = try .loaded(await self.storiesRepository.fetchFavoriteStories())
                 }
             } catch {
-                print("Failed to load posts: \(error)")
+                stories = .error(error)
             }
         }
     }

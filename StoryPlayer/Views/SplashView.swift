@@ -33,5 +33,5 @@ struct SplashView: View {
 }
 
 #Preview {
-    SplashView(continueAction: { print("continue") })
+    SplashView(continueAction: {})
 }
