@@ -21,11 +21,11 @@ struct Story: Identifiable, Codable, Equatable {
 extension Story {
     static var testData: [Story] = [
         Story(title: "Little Red Riding Hood", description: "A young girl is chased by a cunning wolf", author: "Charles Perrault", imageUrl: "little-red-riding-hood", url: "little-red-riding-hood"),
+        Story(title: "Jack And The Beanstalk", description: "", author: "Logan Marshall", imageUrl: "jack-and-the-beanstalk", url: "jack-and-the-beanstalk", isFavorite: true),
         Story(title: "The Emperors New Clothes", description: "", author: "Hans Christian Andersen", imageUrl: "emperors-new-clothes", url: "emperors-new-clothes"),
+        Story(title: "The Tale Of Peter Rabbit", description: "", author: "Beatrix Potter", imageUrl: "the-tale-of-peter-rabbit", url: "the-tale-of-peter-rabbit"),
         Story(title: "The Little Mermaid", description: "", author: "Hans Christian Andersen", imageUrl: "little-mermaid", url: "little-mermaid"),
-        Story(title: "The Little Mermaid", description: "", author: "Hans Christian Andersen", imageUrl: "little-mermaid", url: "little-mermaid", isFavorite: true),
-        Story(title: "The Emperors New Clothes", description: "", author: "Hans Christian Andersen", imageUrl: "emperors-new-clothes", url: "emperors-new-clothes"),
-        Story(title: "Little Red Riding Hood", description: "A young girl is chased by a cunning wolf", author: "Charles Perrault", imageUrl: "little-red-riding-hood", url: "little-red-riding-hood")
+        Story(title: "The Ugly Duckling", description: "", author: "Hans Christian Andersen", imageUrl: "the-ugly-duckling", url: "the-ugly-duckling")
     ]
 }
 #endif
