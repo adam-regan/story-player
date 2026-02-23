@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct TabContent<Content: View>: View {
-    @AppStorage("colorTheme") private var isDarkMode = false
-
     var topColor: Color
     var headerImageSystemName: String
     var headerTitle: String
@@ -30,10 +28,11 @@ struct TabContent<Content: View>: View {
                     .frame(height: 50)
                     .frame(maxWidth: .infinity)
                     .background(Color.theme.headerBackgroundColor)
-                    content()
-
-                    let colorHeight = (isDarkMode ? CustomTabBarView.tabContainerHeight.dark : CustomTabBarView.tabContainerHeight.light)
-                    Color.clear.frame(height: colorHeight)
+                    ScrollView {
+                        content()
+                        Color.clear.frame(height: CustomTabBarView.tabContainerHeight.dark)
+                    }
+                    .scrollIndicators(.hidden)
                 }
                 .frame(maxHeight: .infinity, alignment: .top)
 
