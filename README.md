@@ -1,8 +1,6 @@
 # Story Player
 An iOS audio story player app built with SwiftUI that lets users browse, favorite, and listen to classic stories with a beautiful, custom-designed interface.
 
-[Project Board](https://github.com/users/adam-regan/projects/1)
-
 ![Image](https://github.com/user-attachments/assets/a599d7cc-0047-4f5b-bd5a-2487b8fb34b2)
 
 ## Features
@@ -87,7 +85,7 @@ Task {
 ## Tech Stack
 
 ### Core Frameworks
-- **SwiftUI**: Declarative UI framework
+- **SwiftUI**
 - **AVFoundation**: Audio playback (`AVPlayer`, `AVPlayerItem`)
 - **Combine**: Reactive programming (`@Published`, `ObservableObject`)
 - **Foundation**: Core utilities, JSON encoding/decoding, file management
@@ -113,51 +111,6 @@ Task {
 - Environment Keys for view configuration
 - Loadable state wrapper
 
-## Project Structure
-
-```
-StoryPlayer/
-├── Models/
-│   ├── Story.swift
-│   ├── Loadable.swift
-│   └── AudioPlayerState (in AudioPlayer.swift)
-├── Views/
-│   ├── Tabs/
-│   │   ├── LibraryView.swift
-│   │   ├── SettingsView.swift
-│   │   └── SplashView.swift
-│   ├── Stories/
-│   │   ├── StoryListView.swift
-│   │   ├── StoryListContent.swift
-│   │   ├── StoryCardView.swift
-│   │   └── StoryDetailView.swift
-│   ├── AudioPlayer/
-│   │   ├── AudioPlayerView.swift
-│   │   ├── MiniAudioPlayerView.swift
-│   │   ├── HeaderPlayerView.swift
-│   │   ├── MainPlayerButtonsView.swift
-│   │   └── ScrubbingBarView.swift
-│   ├── Shared/
-│   │   ├── TabContent.swift
-│   │   ├── CustomTabBarView.swift
-│   │   ├── LoadingListView.swift
-│   │   └── MainTabView.swift
-├── ViewModels/
-│   ├── StoriesViewModel.swift
-│   ├── StoryDetailViewModel.swift
-│   └── AudioViewModel (implied)
-├── Repository/
-│   ├── StoriesRepositoryProtocol.swift (in StoriesRepository.swift)
-│   ├── StoriesRepository.swift
-│   └── StoriesRepositoryStub.swift
-├── Services/
-│   └── AudioPlayer.swift
-├── Utilities/
-│   ├── Color.swift
-│   └── StoryListTypeEnvironmentKey.swift
-└── Tests/
-    └── StoriesViewModelTests.swift
-```
 
 ## Future Improvements
 
@@ -177,7 +130,6 @@ StoryPlayer/
 -  **iPad Optimization**: Responsive layout for larger screens
 -  **Accessibility**: Enhanced VoiceOver support and Dynamic Type
 -  **Error Handling**: Unified error handling for all lists within Library page
--  **Testing**: Expand UI test coverage with Swift Testing
 
 ### Design & Polish
 -  **Animations**: Enhanced transition animations between views
