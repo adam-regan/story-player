@@ -13,10 +13,6 @@ class StoriesViewModel: ObservableObject {
     private let storiesRepository: StoriesRepositoryProtocol
     private let filter: Filter
 
-    var changesAfterFetch: Bool {
-        filter == .favorites
-    }
-
     enum Filter {
         case all, favorites
     }
