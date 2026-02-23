@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		F3F698A72F4CA4F6000C7367 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = F3F698A62F4CA4F6000C7367 /* README.md */; };
+		F3F698A92F4CA517000C7367 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = F3F698A82F4CA517000C7367 /* .gitignore */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		F3C409512F3E2C1F002F98F9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -19,6 +24,8 @@
 /* Begin PBXFileReference section */
 		F3C409432F3E2C1E002F98F9 /* StoryPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StoryPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F3C409502F3E2C1F002F98F9 /* StoryPlayerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StoryPlayerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F3F698A62F4CA4F6000C7367 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		F3F698A82F4CA517000C7367 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -55,6 +62,8 @@
 		F3C4093A2F3E2C1E002F98F9 = {
 			isa = PBXGroup;
 			children = (
+				F3F698A82F4CA517000C7367 /* .gitignore */,
+				F3F698A62F4CA4F6000C7367 /* README.md */,
 				F3C409452F3E2C1E002F98F9 /* StoryPlayer */,
 				F3C409532F3E2C1F002F98F9 /* StoryPlayerTests */,
 				F3C409442F3E2C1E002F98F9 /* Products */,
@@ -162,6 +171,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F3F698A72F4CA4F6000C7367 /* README.md in Resources */,
+				F3F698A92F4CA517000C7367 /* .gitignore in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
