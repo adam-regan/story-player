@@ -37,6 +37,7 @@ class AudioPlayer: ObservableObject {
     private var player: AVPlayer?
     private var timeObserver: Any?
     private var itemObservation: NSKeyValueObservation?
+    private var playbackEndObserver: NSObjectProtocol?
     private var playWhenReady = false
     private(set) var currentTime: TimeInterval = 0 {
         didSet {
@@ -72,6 +73,9 @@ class AudioPlayer: ObservableObject {
 
     deinit {
         if let observer = interruptionObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+        if let observer = playbackEndObserver {
             NotificationCenter.default.removeObserver(observer)
         }
     }
@@ -118,11 +122,23 @@ class AudioPlayer: ObservableObject {
             let seconds = CMTimeGetSeconds(time)
             self?.currentTime = seconds.isFinite ? seconds : 0
         }
+        
+        playbackEndObserver = NotificationCenter.default.addObserver(
+            forName: .AVPlayerItemDidPlayToEndTime,
+            object: playerItem,
+            queue: .main
+        ) { [weak self] _ in
+            self?.handlePlaybackEnd()
+        }
+
         player = avPlayer
     }
 
     func play() {
         guard let player = player else { return }
+        if currentTime == duration {
+            stop()
+        }
         player.play()
         state = .playing
     }
@@ -164,6 +180,10 @@ class AudioPlayer: ObservableObject {
                 self.timeObserver = nil
             }
         }
+        if let observer = playbackEndObserver {
+            NotificationCenter.default.removeObserver(observer)
+            playbackEndObserver = nil
+        }
         itemObservation?.invalidate()
         itemObservation = nil
         duration = 0
@@ -179,6 +199,11 @@ class AudioPlayer: ObservableObject {
         } catch {
             print("Failed to reactivate audio session: \(error)")
         }
+    }
+
+    private func handlePlaybackEnd() {
+        state = .stopped
+        currentTime = duration
     }
 
     private func handleInterruption(_ notification: Notification) {
