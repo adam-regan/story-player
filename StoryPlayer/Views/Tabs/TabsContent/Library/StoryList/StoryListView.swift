@@ -53,14 +53,7 @@ struct StoryListView: View {
             }
         }
         .onAppear {
-            switch viewModel.stories {
-            case .loaded:
-                if viewModel.changesAfterFetch {
-                    viewModel.fetchStories()
-                }
-            case .loading, .error:
-                viewModel.fetchStories()
-            }
+            viewModel.fetchStories()
         }
     }
 }
