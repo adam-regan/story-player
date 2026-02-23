@@ -5,29 +5,28 @@
 //  Created by Adam Regan on 23/02/2026.
 //
 
+import Foundation
 @testable import StoryPlayer
-import XCTest
+import Testing
 
+@Suite("Story Model Tests")
 @MainActor
-final class StoryTests: XCTestCase {
-    var encoder: JSONEncoder!
-    var decoder: JSONDecoder!
-
-    override func setUpWithError() throws {
+struct StoryTests {
+    let encoder: JSONEncoder
+    let decoder: JSONDecoder
+    
+    init() {
         encoder = JSONEncoder()
         decoder = JSONDecoder()
     }
-
-    override func tearDownWithError() throws {
-        encoder = nil
-        decoder = nil
-    }
-
+    
     // MARK: - Encoding Tests
-
-    func testStoryEncoding() throws {
+    
+    @Test("Story encoding produces valid JSON with all fields")
+    func storyEncoding() throws {
+        // Given
         let story = try Story(
-            id: XCTUnwrap(UUID(uuidString: "12345678-1234-1234-1234-123456789012")),
+            id: #require(UUID(uuidString: "12345678-1234-1234-1234-123456789012")),
             title: "Test Story",
             description: "A test description",
             author: "Test Author",
@@ -35,22 +34,25 @@ final class StoryTests: XCTestCase {
             url: "test-url",
             isFavorite: true
         )
-
+        
+        // When
         let data = try encoder.encode(story)
-
-        XCTAssertFalse(data.isEmpty, "Encoded data should not be empty")
-
-        let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
-        XCTAssertNotNil(json)
-        XCTAssertEqual(json?["title"] as? String, "Test Story")
-        XCTAssertEqual(json?["description"] as? String, "A test description")
-        XCTAssertEqual(json?["author"] as? String, "Test Author")
-        XCTAssertEqual(json?["imageUrl"] as? String, "test-image")
-        XCTAssertEqual(json?["url"] as? String, "test-url")
-        XCTAssertEqual(json?["isFavorite"] as? Bool, true)
+        
+        // Then
+        #expect(!data.isEmpty, "Encoded data should not be empty")
+        
+        let json = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
+        #expect(json["title"] as? String == "Test Story")
+        #expect(json["description"] as? String == "A test description")
+        #expect(json["author"] as? String == "Test Author")
+        #expect(json["imageUrl"] as? String == "test-image")
+        #expect(json["url"] as? String == "test-url")
+        #expect(json["isFavorite"] as? Bool == true)
     }
-
-    func testStoryEncodingWithDefaultValues() throws {
+    
+    @Test("Story encoding with default values generates ID and sets isFavorite to false")
+    func storyEncodingWithDefaultValues() throws {
+        // Given
         let story = Story(
             title: "Test Story",
             description: "A test description",
@@ -58,32 +60,38 @@ final class StoryTests: XCTestCase {
             imageUrl: "test-image",
             url: "test-url"
         )
-
+        
+        // When
         let data = try encoder.encode(story)
-
-        let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
-        XCTAssertNotNil(json)
-        XCTAssertEqual(json?["isFavorite"] as? Bool, false, "Default isFavorite should be false")
-        XCTAssertNotNil(json?["id"], "ID should be generated")
+        
+        // Then
+        let json = try #require(JSONSerialization.jsonObject(with: data) as? [String: Any])
+        #expect(json["isFavorite"] as? Bool == false, "Default isFavorite should be false")
+        #expect(json["id"] != nil, "ID should be generated")
     }
-
-    func testStoryArrayEncoding() throws {
+    
+    @Test("Story array encoding produces valid JSON array")
+    func storyArrayEncoding() throws {
+        // Given
         let stories = [
             Story(title: "Story 1", description: "Description 1", author: "Author 1", imageUrl: "image1", url: "url1"),
             Story(title: "Story 2", description: "Description 2", author: "Author 2", imageUrl: "image2", url: "url2", isFavorite: true)
         ]
-
+        
+        // When
         let data = try encoder.encode(stories)
-
-        XCTAssertFalse(data.isEmpty)
-        let jsonArray = try JSONSerialization.jsonObject(with: data) as? [[String: Any]]
-        XCTAssertNotNil(jsonArray)
-        XCTAssertEqual(jsonArray?.count, 2)
+        
+        // Then
+        #expect(!data.isEmpty)
+        let jsonArray = try #require(JSONSerialization.jsonObject(with: data) as? [[String: Any]])
+        #expect(jsonArray.count == 2)
     }
-
+    
     // MARK: - Decoding Tests
-
-    func testStoryDecoding() throws {
+    
+    @Test("Story decoding from valid JSON succeeds")
+    func storyDecoding() throws {
+        // Given
         let json = """
         {
             "id": "12345678-1234-1234-1234-123456789012",
@@ -95,19 +103,23 @@ final class StoryTests: XCTestCase {
             "isFavorite": true
         }
         """.data(using: .utf8)!
-
+        
+        // When
         let story = try decoder.decode(Story.self, from: json)
-
-        XCTAssertEqual(story.id.uuidString.uppercased(), "12345678-1234-1234-1234-123456789012")
-        XCTAssertEqual(story.title, "Test Story")
-        XCTAssertEqual(story.description, "A test description")
-        XCTAssertEqual(story.author, "Test Author")
-        XCTAssertEqual(story.imageUrl, "test-image")
-        XCTAssertEqual(story.url, "test-url")
-        XCTAssertTrue(story.isFavorite)
+        
+        // Then
+        #expect(story.id.uuidString.uppercased() == "12345678-1234-1234-1234-123456789012")
+        #expect(story.title == "Test Story")
+        #expect(story.description == "A test description")
+        #expect(story.author == "Test Author")
+        #expect(story.imageUrl == "test-image")
+        #expect(story.url == "test-url")
+        #expect(story.isFavorite == true)
     }
-
-    func testStoryDecodingWithMissingRequiredField() throws {
+    
+    @Test("Story decoding with missing required field throws error")
+    func storyDecodingWithMissingRequiredField() throws {
+        // Given
         let json = """
         {
             "id": "12345678-1234-1234-1234-123456789012",
@@ -117,13 +129,16 @@ final class StoryTests: XCTestCase {
             "url": "test-url"
         }
         """.data(using: .utf8)!
-
-        XCTAssertThrowsError(try decoder.decode(Story.self, from: json)) { error in
-            XCTAssertTrue(error is DecodingError, "Should throw DecodingError")
+        
+        // When/Then
+        #expect(throws: DecodingError.self) {
+            try decoder.decode(Story.self, from: json)
         }
     }
-
-    func testStoryArrayDecoding() throws {
+    
+    @Test("Story array decoding from valid JSON succeeds")
+    func storyArrayDecoding() throws {
+        // Given
         let json = """
         [
             {
@@ -146,19 +161,23 @@ final class StoryTests: XCTestCase {
             }
         ]
         """.data(using: .utf8)!
-
+        
+        // When
         let stories = try decoder.decode([Story].self, from: json)
-
-        XCTAssertEqual(stories.count, 2)
-        XCTAssertEqual(stories[0].title, "Story 1")
-        XCTAssertFalse(stories[0].isFavorite)
-        XCTAssertEqual(stories[1].title, "Story 2")
-        XCTAssertTrue(stories[1].isFavorite)
+        
+        // Then
+        #expect(stories.count == 2)
+        #expect(stories[0].title == "Story 1")
+        #expect(stories[0].isFavorite == false)
+        #expect(stories[1].title == "Story 2")
+        #expect(stories[1].isFavorite == true)
     }
-
+    
     // MARK: - Round-Trip Tests
-
-    func testStoryEncodingDecodingRoundTrip() throws {
+    
+    @Test("Story encoding and decoding round trip preserves all data")
+    func storyEncodingDecodingRoundTrip() throws {
+        // Given
         let originalStory = Story(
             id: UUID(),
             title: "Test Story",
@@ -168,33 +187,39 @@ final class StoryTests: XCTestCase {
             url: "test-url",
             isFavorite: true
         )
-
+        
+        // When
         let encodedData = try encoder.encode(originalStory)
         let decodedStory = try decoder.decode(Story.self, from: encodedData)
-
-        XCTAssertEqual(originalStory, decodedStory, "Story should be equal after encoding and decoding")
-        XCTAssertEqual(originalStory.id, decodedStory.id)
-        XCTAssertEqual(originalStory.title, decodedStory.title)
-        XCTAssertEqual(originalStory.description, decodedStory.description)
-        XCTAssertEqual(originalStory.author, decodedStory.author)
-        XCTAssertEqual(originalStory.imageUrl, decodedStory.imageUrl)
-        XCTAssertEqual(originalStory.url, decodedStory.url)
-        XCTAssertEqual(originalStory.isFavorite, decodedStory.isFavorite)
+        
+        // Then
+        #expect(originalStory == decodedStory, "Story should be equal after encoding and decoding")
+        #expect(originalStory.id == decodedStory.id)
+        #expect(originalStory.title == decodedStory.title)
+        #expect(originalStory.description == decodedStory.description)
+        #expect(originalStory.author == decodedStory.author)
+        #expect(originalStory.imageUrl == decodedStory.imageUrl)
+        #expect(originalStory.url == decodedStory.url)
+        #expect(originalStory.isFavorite == decodedStory.isFavorite)
     }
-
-    func testStoryArrayRoundTrip() throws {
+    
+    @Test("Story array encoding and decoding round trip preserves all stories")
+    func storyArrayRoundTrip() throws {
+        // Given
         let originalStories = [
             Story(title: "Story 1", description: "Desc 1", author: "Author 1", imageUrl: "img1", url: "url1"),
             Story(title: "Story 2", description: "Desc 2", author: "Author 2", imageUrl: "img2", url: "url2", isFavorite: true),
             Story(title: "Story 3", description: "Desc 3", author: "Author 3", imageUrl: "img3", url: "url3")
         ]
-
+        
+        // When
         let encodedData = try encoder.encode(originalStories)
         let decodedStories = try decoder.decode([Story].self, from: encodedData)
-
-        XCTAssertEqual(originalStories.count, decodedStories.count)
+        
+        // Then
+        #expect(originalStories.count == decodedStories.count)
         for (original, decoded) in zip(originalStories, decodedStories) {
-            XCTAssertEqual(original, decoded)
+            #expect(original == decoded)
         }
     }
 }
