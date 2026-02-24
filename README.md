@@ -1,6 +1,12 @@
 # Story Player
 An iOS audio story player app built with SwiftUI that lets users browse, favorite, and listen to classic stories with a beautiful, custom-designed interface.
 
+## Motivation
+
+I built this project as part of my transition into iOS development and to demonstrate how I approach building thoughtful, production-quality apps with SwiftUI. It’s inspired by the opportunity to work on meaningful audio experiences. Especially products that encourage creativity, storytelling, and positive screen-free interactions for children.
+
+The goal was to go beyond a simple demo and explore real-world concerns like clean architecture, audio playback, state management, testing, and polished UI. By building an end-to-end app, I wanted to show both my technical growth and my enthusiasm for creating delightful user experiences.
+
 [Project Board](https://github.com/users/adam-regan/projects/1)
 
 ![Image](https://github.com/user-attachments/assets/a599d7cc-0047-4f5b-bd5a-2487b8fb34b2)
