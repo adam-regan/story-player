@@ -1,160 +1,305 @@
 # Story Player
-An iOS audio story player app built with SwiftUI that lets users browse, favorite, and listen to classic stories with a beautiful, custom-designed interface.
 
-## Motivation
+A **SwiftUI audio story player inspired by products like Yoto**, designed to explore production-quality iOS architecture for
+media playback apps.
 
-I built this project as part of my transition into iOS development and to demonstrate how I approach building thoughtful, production-quality apps with SwiftUI. It’s inspired by the opportunity to work on meaningful audio experiences. Especially products that encourage creativity, storytelling, and positive screen-free interactions for children.
+The app allows users to browse, favourite, and listen to classic stories
+through a custom-designed interface featuring a persistent mini-player,
+smooth navigation, and modern SwiftUI architecture.
 
-The goal was to go beyond a simple demo and explore real-world concerns like clean architecture, audio playback, state management, testing, and polished UI. By building an end-to-end app, I wanted to show both my technical growth and my enthusiasm for creating delightful user experiences.
+## Highlights
 
-[Project Board](https://github.com/users/adam-regan/projects/1)
+• Audio playback powered by **AVFoundation (AVPlayer)**\
+• **Swift Concurrency** (async/await) for asynchronous data loading\
+• **MVVM architecture** with repository abstraction\
+• **Persistent mini audio player** across navigation\
+• **Custom SwiftUI UI components and theming system**\
+• **Skeleton loading states** for improved UX\
+• Protocol-driven design for testability
 
-![Image](https://github.com/user-attachments/assets/a599d7cc-0047-4f5b-bd5a-2487b8fb34b2)
+------------------------------------------------------------------------
 
-## Features
+# Demo
 
-- **Browse Stories**: Explore a collection of stories in grid and horizontal scrolling layouts
-- **Audio Playback**: Full-featured audio player with play/pause, scrubbing, and progress tracking
-- **Favorites**: Mark stories as favorites for quick access
-- **Custom Tab Bar**: Beautiful custom tab navigation with animated transitions
-- **Mini Player**: Persistent mini audio player that follows you across tabs
-- **Dark Mode Support**: Full support for light and dark color schemes
-- **Custom Theming**: Rich color palette system with custom theme support
-- **Fake Backend**: Repository class emulating interaction with a real backend following appropriate architecture
-- **Skeleton Screen**: Skeleton screen behavour for slow loading story lists
+ ![Image](https://github.com/user-attachments/assets/a599d7cc-0047-4f5b-bd5a-2487b8fb34b2)
 
-## Architecture
+------------------------------------------------------------------------
 
-The app follows the **MVVM (Model-View-ViewModel)** architecture pattern with a clear separation of concerns:
+# Motivation
 
-### Layers
+This project explores how to build a **modern SwiftUI media
+application** that balances clean architecture with polished user
+experience.
 
-#### 1. **Views (SwiftUI)**
-- **Tab Views**: `LibraryView`, `SettingsView`
-- **Story Views**: `StoryListView`, `StoryCardView`, `StoryDetailView`
-- **Audio Player Views**: `AudioPlayerView`, `MiniAudioPlayerView`, `HeaderPlayerView`, `MainPlayerButtonsView`, `ScrubbingBarView`
-- **Shared Components**: `TabContent`, `CustomTabBarView`, `StoryListContent`
+The focus was on solving real-world concerns such as:
 
-#### 2. **ViewModels**
-- **StoriesViewModel**: Manages story list state, filtering (all/favorites), and data fetching
-- **StoryDetailViewModel**: Handles individual story actions (favoriting/unfavoriting)
-- **AudioViewModel**: Manages audio playback state and controls
+• Audio playback management\
+• Asynchronous data loading\
+• State management across multiple screens\
+• Clean architecture and testability\
+• Creating responsive and visually engaging UI components
 
-All ViewModels are marked `@MainActor` for safe UI updates and use `@Published` properties for reactive state management.
+The goal was to build something closer to a **real product experience
+rather than a simple demo app**.
 
-#### 3. **Models**
-- **Story**: Core data model representing a story (title, author, description, image, audio URL, favorite status)
+------------------------------------------------------------------------
 
+# Features
 
-#### 4. **Repository Layer**
-- **StoriesRepositoryProtocol**: Protocol defining data access interface
-- **StoriesRepository**: Production implementation using local JSON file storage to emulate real JSON fetches and updates with Codables
-- **StoriesRepositoryStub**: Test/preview implementation for development
+### Browse Stories
 
-The repository pattern abstracts data access, making it easy to swap between local storage, network APIs, or test data.
+Explore a collection of stories displayed in both **grid and horizontal
+scrolling layouts**.
 
-#### 5. **Services**
-- **AudioPlayer**: AVFoundation-based audio playback service with delegate pattern for state updates and time tracking
+### Audio Playback
 
-### Key Patterns
+Full-featured audio player with:
 
-#### Dependency Injection
-ViewModels receive dependencies through their initializers:
-```swift
-StoriesViewModel(filter: .all, storiesRepository: storiesRepository)
-```
+• play / pause\
+• scrubbing and progress tracking
 
-#### Protocol-Oriented Design
-Repository layer uses protocols for testability and flexibility:
-```swift
-protocol StoriesRepositoryProtocol {
-    func fetchStories() async throws -> [Story]
-    func fetchFavoriteStories() async throws -> [Story]
-    func favorite(_ story: Story) async throws
-    func unfavorite(_ story: Story) async throws
-}
-```
+### Mini Player
 
-#### Environment Objects & Environment Values
-- `@EnvironmentObject` for shared state (ViewModels, AudioViewModel)
-- Custom `@Environment(\.storyListType)` for configuration
+A **persistent mini audio player** that follows the user across tabs and
+allows quick playback control.
+
+### Favourites
+
+Users can mark stories as favourites for quick access.
+
+### Custom Navigation
+
+A **custom tab bar** with animated transitions between sections.
+
+### Theming
+
+Support for **light and dark mode** with a custom colour palette system.
+
+### Skeleton Loading
+
+Story lists display **skeleton loading states** to simulate real network
+behaviour and improve perceived performance.
+
+------------------------------------------------------------------------
+
+# Tech Stack
+
+## Core Frameworks
+
+• **SwiftUI** - UI framework\
+• **AVFoundation** - audio playback (AVPlayer, AVPlayerItem)\
+• **Combine** - reactive state updates\
+• **Foundation** - JSON decoding, file management, utilities
+
+## Swift Features
+
+• **Swift 6.2**\
+• **Swift Concurrency** (async/await, Task, @MainActor)\
+• **Property wrappers**:
+- `@State`
+- `@Published`
+- `@EnvironmentObject`
+- `@Environment`
+- `@AppStorage`
+
+------------------------------------------------------------------------
+
+# Architecture
+
+The app follows an **MVVM architecture** with clear separation between
+UI, business logic, and data access.
+
+Key architectural goals:
+
+• Maintain **separation of concerns**\
+• Enable **testability** through protocol-driven design\
+• Allow **data source flexibility** via repository abstraction\
+• Keep SwiftUI views **lightweight and declarative**
+
+## Layers
+
+### Views (SwiftUI)
+
+Views focus purely on presentation and user interaction.
+
+Examples include:
+
+- LibraryView
+- StoryListView
+- StoryCardView
+- StoryDetailView
+- AudioPlayerView
+- MiniAudioPlayerView
+- CustomTabBarView
+
+Reusable UI components are extracted into smaller composable views.
+
+------------------------------------------------------------------------
+
+### ViewModels
+
+ViewModels manage UI state and coordinate data between services and
+views.
+
+Examples:
+
+**StoriesViewModel**\
+Handles story fetching, filtering, and UI state.
+
+**StoryDetailViewModel**\
+Manages individual story actions such as favouriting.
+
+**AudioViewModel**\
+Controls playback state and communicates with the audio service.
+
+All ViewModels are annotated with **@MainActor** and use **@Published**
+properties to drive reactive updates.
+
+------------------------------------------------------------------------
+
+### Models
+
+**Story**
+
+Represents story metadata including:
+
+- title
+- author
+- description
+- image
+- audioURL
+- favourite status
+
+------------------------------------------------------------------------
+
+### Repository Layer
+
+The repository pattern abstracts data access and enables future backend
+integration.
+
+Protocol:
+
+    protocol StoriesRepositoryProtocol {
+        func fetchStories() async throws -> [Story]
+        func fetchFavoriteStories() async throws -> [Story]
+        func favorite(_ story: Story) async throws
+        func unfavorite(_ story: Story) async throws
+    }
+
+Implementations:
+
+**StoriesRepository**\
+Local JSON-based data source simulating backend responses.
+
+**StoriesRepositoryStub**\
+Used for previews and testing.
+
+------------------------------------------------------------------------
+
+### Services
+
+**AudioPlayer**
+
+A dedicated service responsible for audio playback using
+**AVFoundation**.
+
+Responsibilities include:
+
+• Managing AVPlayer lifecycle\
+• Tracking playback time and progress\
+• Updating playback state via delegate callbacks
+
+This keeps audio logic separate from UI and ViewModels.
+
+------------------------------------------------------------------------
+
+# Key Patterns Used
+
+**MVVM architecture**
+
+Clear separation between UI, state management, and business logic.
+
+**Repository Pattern**
+
+Decouples the data layer from UI logic and allows future backend
+integration.
 
 #### Delegate Pattern
 `AudioPlayer` uses delegates for state updates without tight coupling
 
-#### Async/Await
-Modern Swift Concurrency for asynchronous operations:
-```swift
-Task {
-    stories = try .loaded(await storiesRepository.fetchStories())
-}
-```
+**Dependency Injection**
 
-## Tech Stack
-
-### Core Frameworks
-- **SwiftUI**
-- **AVFoundation**: Audio playback (`AVPlayer`, `AVPlayerItem`)
-- **Combine**: Reactive programming (`@Published`, `ObservableObject`)
-- **Foundation**: Core utilities, JSON encoding/decoding, file management
-
-### Language Features
-- **Swift 6.2**: Latest Swift language features
-- **Swift Concurrency**: `async/await`, `Task`, `@MainActor`
-- **Property Wrappers**: `@State`, `@Published`, `@EnvironmentObject`, `@Environment`, `@AppStorage`
-
-### Testing
-- **Swift Testing**: Modern macro-based testing framework
-
-### Design Patterns
-- MVVM (Model-View-ViewModel)
-- Repository Pattern
-- Delegate Pattern
-- Protocol-Oriented Programming
-- Dependency Injection
-
-### Custom Components
-- Custom Tab Bar with animations
-- Custom audio player UI
-- Environment Keys for view configuration
-- Loadable state wrapper
+ViewModels receive dependencies through their initializers.
 
 
-## Future Improvements
+**Protocol-Oriented Design**
 
-### High Priority
--  **Network Layer**: Replace local JSON storage with REST API integration
--  **Download Management**: Allow downloading stories for offline listening
--  **Background Playback**: Enable audio to continue when app is backgrounded
--  **Remote Control**: Lock screen and Control Center integration
+Protocols enable testability and flexible implementations.
 
-### User Experience
--  **Search & Filtering**: Add search functionality
--  **Playback Speed**: Variable playback speed controls (0.5x - 2x)
--  **Sleep Timer**: Auto-stop playback after a set duration
+**Swift Concurrency**
 
-### Technical Enhancements
--  **Widget Support**: Home screen widget showing currently playing story
--  **iPad Optimization**: Responsive layout for larger screens
--  **Accessibility**: Enhanced VoiceOver support and Dynamic Type
--  **Error Handling**: Unified error handling for all lists within Library page
+Async operations handled using modern async/await patterns.
 
-### Design & Polish
--  **Animations**: Enhanced transition animations between views
--  **Haptics**: Tactile feedback for interactions
+**Environment Objects**
 
-### Advanced Features
--  **Content Recommendations**: Personalized story suggestions
--  **Social Features**: Comments, ratings, and reviews
--  **Multi-language**: Localization support
--  **Chromecast/AirPlay**: Cast to external speakers/screens
+Shared state across views using `@EnvironmentObject`.
 
-## Author
+------------------------------------------------------------------------
 
-Adam Regan - February 2026
+# Testing
 
----
+Tests are written using **Swift Testing**, the modern macro-based
+testing framework.
 
-**Note**: This app currently uses local JSON file storage for demo purposes.
+Testing focuses on:
 
+• repository behaviour\
+• ViewModel logic\
+• state transitions
 
+------------------------------------------------------------------------
+
+# Running the Project
+
+1.  Clone the repository
+2.  Open the project in **Xcode**
+3.  Build and run on an **iOS simulator (iOS 17+)**
+
+The project uses bundled **JSON data** to simulate backend responses.
+
+------------------------------------------------------------------------
+
+# Future Improvements
+
+## Platform Features
+
+• Background audio playback\
+• Lock screen media controls\
+• Control Center integration
+
+## User Experience
+
+• Search and filtering\
+• Playback speed controls\
+• Sleep timer
+
+## Technical Enhancements
+
+• Replace local JSON storage with **network API**\
+• Offline downloads for stories\
+• Widget support\
+• iPad layout optimization\
+• Accessibility improvements
+
+## Advanced Features
+
+• Content recommendations\
+• Localization\
+• AirPlay / Chromecast support
+
+------------------------------------------------------------------------
+
+# Author
+
+Adam Regan\
+February 2026
