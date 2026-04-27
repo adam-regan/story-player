@@ -10,8 +10,8 @@ import SwiftUI
 struct ScrubbingBarView: View {
     @EnvironmentObject var audioViewModel: AudioViewModel
 
-    @State var isScrubbing: Bool = false
-    @State var scrubbingProgress: CGFloat = 0
+    @State private var isScrubbing: Bool = false
+    @State private var scrubbingProgress: CGFloat = 0
 
     var body: some View {
         let barHeight: CGFloat = 4

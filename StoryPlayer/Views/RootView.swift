@@ -12,7 +12,7 @@ struct RootView: View {
         case loading, main
     }
 
-    @State var rootState: RootState = .loading
+    @State private var rootState: RootState = .loading
 
     var body: some View {
         switch rootState {

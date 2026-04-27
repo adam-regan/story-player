@@ -11,8 +11,8 @@ struct StoryListView: View {
     @EnvironmentObject var viewModel: StoriesViewModel
     var title: String
     @Environment(\.storyListType) var listType
-    @State var alertPresented: Bool = false
-    @State var errorMessage: String = ""
+    @State private var alertPresented: Bool = false
+    @State private var errorMessage: String = ""
 
     var body: some View {
         VStack {
