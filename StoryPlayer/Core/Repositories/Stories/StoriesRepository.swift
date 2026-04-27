@@ -12,8 +12,7 @@ class StoriesRepository: StoriesRepositoryProtocol {
     private let fileURL: URL
 
     init() {
-        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        fileURL = documentsDirectory.appendingPathComponent("stories.json")
+        fileURL = URL.documentsDirectory.appending(path: "stories.json")
         if !FileManager.default.fileExists(atPath: fileURL.path) {
             saveStories(Story.testData)
         }
