@@ -19,7 +19,7 @@ struct ScrubbingBarView: View {
             Rectangle()
                 .fill(Color.gray.opacity(0.3))
                 .frame(height: barHeight)
-                .cornerRadius(2)
+                .clipShape(.rect(cornerRadius: 2))
         } else {
             GeometryReader { geo in
                 let circleDiameter: CGFloat = 12
@@ -30,13 +30,13 @@ struct ScrubbingBarView: View {
                 Rectangle()
                     .fill(Color.gray.opacity(0.3))
                     .frame(height: barHeight)
-                    .cornerRadius(2)
+                    .clipShape(.rect(cornerRadius: 2))
                     .overlay(alignment: .leading) {
                         ZStack(alignment: .leading) {
                             Rectangle()
                                 .fill(Color.theme.palette1)
                                 .frame(width: barWidth, height: barHeight)
-                                .cornerRadius(2)
+                                .clipShape(.rect(cornerRadius: 2))
 
                             Circle()
                                 .fill(Color.theme.palette1)

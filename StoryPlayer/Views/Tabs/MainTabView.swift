@@ -20,6 +20,7 @@ struct MainTabView: View {
                 case .settings:
                     SettingsView()
             }
+
             CustomTabBarView(selectedTab: $selectedTab)
         }
         .environmentObject(audioViewModel)

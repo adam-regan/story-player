@@ -25,7 +25,7 @@ struct StoryCardView: View {
             Image(story.imageUrl)
                 .resizable()
                 .scaledToFill()
-                .cornerRadius(Radius.md)
+                .clipShape(.rect(cornerRadius: Radius.md))
             let isPlaying = audioViewModel.isPlaying && audioViewModel.isCurrentStory(story)
 
             VStack {

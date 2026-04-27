@@ -27,7 +27,7 @@ struct StoryListView: View {
             case let .loaded(stories):
                 StoryListContent(title: title) {
                     ForEach(stories) { story in
-                        NavigationLink(destination: StoryDetailView(viewModel: viewModel.makeStoryDetailViewModel(for: story))) {
+                        NavigationLink(value: story) {
                             StoryCardView(story: story)
                         }.buttonStyle(.plain)
                     }
@@ -51,6 +51,9 @@ struct StoryListView: View {
                 errorMessage = ""
                 alertPresented = false
             }
+        }
+        .navigationDestination(for: Story.self) { story in
+            StoryDetailView(viewModel: viewModel.makeStoryDetailViewModel(for: story))
         }
         .onAppear {
             viewModel.fetchStories()

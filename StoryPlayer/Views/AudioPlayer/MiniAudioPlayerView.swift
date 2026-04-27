@@ -18,7 +18,7 @@ struct MiniAudioPlayerView: View {
                 .fill(Color.theme.contentBackground)
                 .frame(maxWidth: .infinity)
                 .frame(height: MiniAudioPlayerView.miniPlayerHeight)
-                .cornerRadius(Radius.md)
+                .clipShape(.rect(cornerRadius: Radius.md))
                 .shadow(color: Color.black.opacity(0.2), radius: 8)
             HStack {
                 if audioViewModel.isDisabled {

@@ -40,7 +40,7 @@ struct StoryDetailView: View {
                                 .scaledToFit()
                                 .frame(maxWidth: 200)
                                 .clipped()
-                                .cornerRadius(Radius.md)
+                                .clipShape(.rect(cornerRadius: Radius.md))
                             VStack {
                                 Spacer()
                                 HStack {

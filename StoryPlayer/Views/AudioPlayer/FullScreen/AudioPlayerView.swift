@@ -26,7 +26,7 @@ struct AudioPlayerView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 320)
-                        .cornerRadius(Radius.md)
+                        .clipShape(.rect(cornerRadius: Radius.md))
                 }
                 Spacer()
                 if !audioViewModel.isDisabled {
