@@ -14,7 +14,7 @@ enum StoryListType: Equatable {
 struct StoryListContent<Content: View>: View {
     @Environment(\.storyListType) var listType
     var title: String
-    @ViewBuilder let content: () -> Content
+    @ViewBuilder let content: Content
 
     var body: some View {
         HStack {
@@ -31,7 +31,7 @@ struct StoryListContent<Content: View>: View {
                 ScrollView(.horizontal) {
                     LazyHGrid(rows: rows) {
                         Color.clear.frame(width: Spacing.md)
-                        content()
+                        content
                         Color.clear.frame(width: Spacing.md)
                     }
                 }
@@ -43,7 +43,7 @@ struct StoryListContent<Content: View>: View {
                 let columns = [gridItem, gridItem, gridItem]
                 VStack(alignment: .leading) {
                     LazyVGrid(columns: columns) {
-                        content()
+                        content
                     }
                     .padding(.horizontal, Spacing.lg)
                     .scrollIndicators(.hidden)

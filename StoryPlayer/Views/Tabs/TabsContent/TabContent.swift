@@ -11,7 +11,7 @@ struct TabContent<Content: View>: View {
     var topColor: Color
     var headerImageSystemName: String
     var headerTitle: String
-    @ViewBuilder let content: () -> Content
+    @ViewBuilder let content: Content
 
     var body: some View {
         NavigationStack {
@@ -29,7 +29,7 @@ struct TabContent<Content: View>: View {
                     .frame(maxWidth: .infinity)
                     .background(Color.theme.headerBackgroundColor)
                     ScrollView {
-                        content()
+                        content
                         Color.clear.frame(height: CustomTabBarView.tabContainerHeight.dark)
                     }
                     .scrollIndicators(.hidden)
