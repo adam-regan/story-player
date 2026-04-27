@@ -16,12 +16,12 @@ struct SplashView: View {
             VStack {
                 Spacer()
                 Text("Story Player")
-                    .font(.system(size: 40, weight: .bold))
+                    .font(.largeTitle.bold())
                     .foregroundStyle(Color.theme.companyText)
                 Spacer()
                 Button(action: continueAction) {
                     Text("Continue")
-                        .font(.system(size: 25, weight: .bold))
+                        .font(.title2.bold())
                         .foregroundStyle(Color.theme.companyColor)
                 }
                 .buttonStyle(.borderedProminent)
