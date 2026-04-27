@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct LibraryView: View {
+    @State private var storiesRepository = StoriesRepository()
+
     var body: some View {
-        let storiesRepository = StoriesRepository()
         TabContent(topColor: Color.theme.palette1, headerImageSystemName: "book.pages", headerTitle: "Library") {
             Group {
                 StoryListView(title: "Favourites")
