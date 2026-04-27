@@ -7,13 +7,6 @@
 
 import SwiftUI
 
-private struct StoryListTypeKey: EnvironmentKey {
-    static let defaultValue: StoryListType = .grid
-}
-
 extension EnvironmentValues {
-    var storyListType: StoryListType {
-        get { self[StoryListTypeKey.self] }
-        set { self[StoryListTypeKey.self] = newValue }
-    }
+    @Entry var storyListType: StoryListType = .grid
 }
