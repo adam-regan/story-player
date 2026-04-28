@@ -88,7 +88,6 @@ behaviour and improve perceived performance.
 
 • **SwiftUI** - UI framework\
 • **AVFoundation** - audio playback (AVPlayer, AVPlayerItem)\
-• **Combine** - reactive state updates\
 • **Foundation** - JSON decoding, file management, utilities
 
 ## Swift Features
@@ -107,14 +106,36 @@ behaviour and improve perceived performance.
 # Architecture
 
 The app follows an **MVVM architecture** with clear separation between
-UI, business logic, and data access.
+UI, business logic, and data access, organised using a
+**feature-folder structure**.
 
 Key architectural goals:
 
 • Maintain **separation of concerns**\
 • Enable **testability** through protocol-driven design\
 • Allow **data source flexibility** via repository abstraction\
-• Keep SwiftUI views **lightweight and declarative**
+• Keep SwiftUI views **lightweight and declarative**\
+• Support **scalability** through modular feature folders
+
+## Feature-Folder Structure
+
+The project is organised into self-contained feature folders, each
+owning its own views, view models, and models. This keeps related code
+together, makes features easy to locate, and allows the project to
+scale without deep, unwieldy directory trees.
+
+    Features/
+      AudioPlayer/    – playback UI and view model
+      Library/        – story browsing, favourites, and detail views
+      Settings/       – app settings
+      SplashScreen/   – launch screen
+      TabBar/         – tab bar navigation shell
+
+Shared infrastructure lives outside of features:
+
+    Core/             – repositories, services, utilities
+    Models/           – shared domain models (Story)
+    DesignSystem/     – colour, spacing, and radius tokens
 
 ## Layers
 
@@ -143,11 +164,9 @@ views.
 
 Examples:
 
-**StoriesViewModel**\
-Handles story fetching, filtering, and UI state.
-
-**StoryDetailViewModel**\
-Manages individual story actions such as favouriting.
+**LibraryViewModel**\
+Handles story fetching, client-side filtering, and favourite toggling
+with optimistic updates.
 
 **AudioViewModel**\
 Controls playback state and communicates with the audio service.
@@ -169,6 +188,11 @@ Represents story metadata including:
 - image
 - audioURL
 - favourite status
+
+**LibrarySection** / **LibraryFilter**
+
+Define the configurable sections and filter types used by the library
+feature.
 
 ------------------------------------------------------------------------
 
@@ -302,4 +326,4 @@ The project uses bundled **JSON data** to simulate backend responses.
 # Author
 
 Adam Regan\
-February 2026
+April 2026
