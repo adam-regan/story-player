@@ -1,5 +1,5 @@
 //
-//  StoryListContent.swift
+//  StoryListContentView.swift
 //  StoryPlayer
 //
 //  Created by Adam Regan on 19/02/2026.

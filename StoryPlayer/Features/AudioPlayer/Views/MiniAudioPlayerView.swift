@@ -1,5 +1,5 @@
 //
-//  MiniAudioPlayer.swift
+//  MiniAudioPlayerView.swift
 //  StoryPlayer
 //
 //  Created by Adam Regan on 18/02/2026.
