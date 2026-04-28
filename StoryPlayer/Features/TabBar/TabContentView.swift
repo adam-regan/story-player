@@ -1,5 +1,5 @@
 //
-//  TabContent.swift
+//  TabContentView.swift
 //  StoryPlayer
 //
 //  Created by Adam Regan on 19/02/2026.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TabContent<Content: View>: View {
+struct TabContentView<Content: View>: View {
     var topColor: Color
     var headerImageSystemName: String
     var headerTitle: String
@@ -47,7 +47,7 @@ struct TabContent<Content: View>: View {
 
 #Preview {
     NavigationStack {
-        TabContent(topColor: Color.theme.palette1, headerImageSystemName: "book.pages", headerTitle: "Hello") {
+        TabContentView(topColor: Color.theme.palette1, headerImageSystemName: "book.pages", headerTitle: "Hello") {
             Text("Hello World").padding()
         }
     }

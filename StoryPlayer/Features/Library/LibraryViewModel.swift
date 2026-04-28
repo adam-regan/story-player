@@ -13,36 +13,25 @@ class LibraryViewModel: ObservableObject {
 
     private let storiesRepository: StoriesRepositoryProtocol
 
-    let sections: [Section]
-
-    struct Section: Identifiable {
-        let id = UUID()
-        let title: String
-        let filter: Filter
-        let listType: StoryListType
-    }
-
-    enum Filter {
-        case all, favorites
-    }
+    let sections: [LibrarySection]
 
     init(storiesRepository: StoriesRepositoryProtocol) {
         self.storiesRepository = storiesRepository
         self.sections = LibraryViewModel.defaultSections
     }
 
-    init(storiesRepository: StoriesRepositoryProtocol, sections: [Section]) {
+    init(storiesRepository: StoriesRepositoryProtocol, sections: [LibrarySection]) {
         self.storiesRepository = storiesRepository
         self.sections = sections
     }
 
-    static let defaultSections: [Section] = [
-        Section(title: "Favourites", filter: .favorites, listType: .horizontal),
-        Section(title: "Browse", filter: .all, listType: .grid),
-        Section(title: "For You", filter: .all, listType: .horizontal),
+    static let defaultSections: [LibrarySection] = [
+        LibrarySection(title: "Favourites", filter: .favorites, listType: .horizontal),
+        LibrarySection(title: "Browse", filter: .all, listType: .grid),
+        LibrarySection(title: "For You", filter: .all, listType: .horizontal),
     ]
 
-    func stories(for filter: Filter) -> [Story] {
+    func stories(for filter: LibraryFilter) -> [Story] {
         guard case .loaded(let all) = stories else { return [] }
         switch filter {
         case .all: return all

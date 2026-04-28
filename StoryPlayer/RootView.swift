@@ -17,7 +17,7 @@ struct RootView: View {
     var body: some View {
         switch rootState {
         case .loading:
-            SplashView(continueAction: {
+            SplashScreenView(continueAction: {
                 rootState = .main
             })
         case .main:

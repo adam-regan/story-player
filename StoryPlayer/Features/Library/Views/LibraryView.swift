@@ -18,7 +18,7 @@ struct LibraryView: View {
 
     var body: some View {
         NavigationStack {
-            TabContent(topColor: Color.theme.palette1, headerImageSystemName: "book.pages", headerTitle: "Library") {
+            TabContentView(topColor: Color.theme.palette1, headerImageSystemName: "book.pages", headerTitle: "Library") {
                 Group {
                     switch viewModel.stories {
                     case .loading, .error:

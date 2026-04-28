@@ -11,7 +11,7 @@ enum StoryListType: Equatable {
     case horizontal, grid
 }
 
-struct StoryListContent<Content: View>: View {
+struct StoryListContentView<Content: View>: View {
     @Environment(\.storyListType) var listType
     var title: String
     @ViewBuilder let content: Content
@@ -53,14 +53,14 @@ struct StoryListContent<Content: View>: View {
 }
 
 #Preview("Horizontal") {
-    StoryListContent(title: "Browse") {
+    StoryListContentView(title: "Browse") {
         LoadingListView()
     }
     .environment(\.storyListType, .horizontal)
 }
 
 #Preview("Grid") {
-    StoryListContent(title: "Browse") {
+    StoryListContentView(title: "Browse") {
         LoadingListView()
     }
     .environment(\.storyListType, .grid)

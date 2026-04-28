@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SplashView: View {
+struct SplashScreenView: View {
     var continueAction: () -> Void
 
     var body: some View {
@@ -33,5 +33,5 @@ struct SplashView: View {
 }
 
 #Preview {
-    SplashView(continueAction: {})
+    SplashScreenView(continueAction: {})
 }

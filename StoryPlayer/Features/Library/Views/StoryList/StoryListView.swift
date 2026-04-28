@@ -14,12 +14,12 @@ struct StoryListView: View {
 
     var body: some View {
         if stories.isEmpty {
-            StoryListContent(title: title) {
+            StoryListContentView(title: title) {
                 LoadingListView()
             }
             .scrollDisabled(true)
         } else {
-            StoryListContent(title: title) {
+            StoryListContentView(title: title) {
                 ForEach(stories) { story in
                     NavigationLink(value: story) {
                         StoryCardView(story: story)
