@@ -10,20 +10,28 @@ import SwiftUI
 struct StoryDetailView: View {
     @EnvironmentObject var audioViewModel: AudioViewModel
     @Environment(\.dismiss) private var dismiss
-    @StateObject var viewModel: StoryDetailViewModel
+    @State private var story: Story
+    var onToggleFavorite: (Story) -> Void
+
+    init(story: Story, onToggleFavorite: @escaping (Story) -> Void) {
+        _story = State(initialValue: story)
+        self.onToggleFavorite = onToggleFavorite
+    }
 
     var body: some View {
         VStack(spacing: 0) {
             HStack {
-                Image(systemName: "chevron.left")
+                Button("Back", systemImage: "chevron.left", action: dismiss.callAsFunction)
+                    .labelStyle(.iconOnly)
                     .imageScale(.large)
                     .tint(.black)
-                    .onTapGesture { dismiss() }
                 Spacer()
-                Image(systemName: "heart\(viewModel.isFavorite ? ".fill" : "")")
-                    .imageScale(.large)
-                    .tint(.black)
-                    .onTapGesture { viewModel.favoritePost() }
+                Button("Favorite", systemImage: "heart\(story.isFavorite ? ".fill" : "")") {
+                    toggleFavorite()
+                }
+                .labelStyle(.iconOnly)
+                .imageScale(.large)
+                .tint(.black)
             }
             .padding(.horizontal, Spacing.xl)
             .padding(.vertical, Spacing.md)
@@ -35,7 +43,7 @@ struct StoryDetailView: View {
                             .frame(maxWidth: .infinity)
                             .frame(height: 250)
                         ZStack {
-                            Image(viewModel.imageUrl)
+                            Image(story.imageUrl)
                                 .resizable()
                                 .scaledToFit()
                                 .frame(maxWidth: 200)
@@ -45,22 +53,20 @@ struct StoryDetailView: View {
                                 Spacer()
                                 HStack {
                                     Spacer()
-                                    let isPlaying = audioViewModel.isPlaying && audioViewModel.isCurrentStory(viewModel.story)
+                                    let isPlaying = audioViewModel.isPlaying && audioViewModel.isCurrentStory(story)
 
-                                    Button(action: {
+                                    Button(isPlaying ? "Pause" : "Play", systemImage: "\(isPlaying ? "pause" : "play").circle.fill") {
                                         if isPlaying {
                                             audioViewModel.pause()
                                         } else {
-                                            audioViewModel.play(story: viewModel.story)
+                                            audioViewModel.play(story: story)
                                         }
-                                    }) {
-                                        Image(systemName: "\(isPlaying ? "pause" : "play").circle.fill")
-                                            .resizable()
-                                            .foregroundStyle(Color.theme.palette1, Color.theme.contentBackground)
-                                            .scaledToFit()
-                                            .frame(width: 36)
-                                            .shadow(color: Color.black.opacity(0.5), radius: 4)
                                     }
+                                    .labelStyle(.iconOnly)
+                                    .buttonStyle(.plain)
+                                    .font(.system(size: 36))
+                                    .foregroundStyle(Color.theme.palette1, Color.theme.contentBackground)
+                                    .shadow(color: Color.black.opacity(0.5), radius: 4)
                                 }
                             }
                             .padding(Spacing.sm)
@@ -70,11 +76,11 @@ struct StoryDetailView: View {
                     VStack {
                         HStack {
                             VStack(alignment: .leading) {
-                                Text(viewModel.title)
+                                Text(story.title)
                                     .font(.title)
                                     .bold()
                                     .padding(.bottom, Spacing.xs)
-                                Text("By \(viewModel.author)")
+                                Text("By \(story.author)")
                                     .font(.body)
                             }
                             Spacer()
@@ -89,11 +95,16 @@ struct StoryDetailView: View {
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
     }
+
+    private func toggleFavorite() {
+        story.isFavorite.toggle()
+        onToggleFavorite(story)
+    }
 }
 
 #Preview {
     NavigationStack {
-        StoryDetailView(viewModel: StoryDetailViewModel(story: Story.testData[3], favoriteAction: { _ in }))
+        StoryDetailView(story: Story.testData[3], onToggleFavorite: { _ in })
     }
     .environmentObject(AudioViewModel(audioPlayer: .init()))
 }

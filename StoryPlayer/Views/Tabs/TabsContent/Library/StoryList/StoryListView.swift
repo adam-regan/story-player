@@ -8,86 +8,43 @@
 import SwiftUI
 
 struct StoryListView: View {
-    @EnvironmentObject var viewModel: StoriesViewModel
     var title: String
+    var stories: [Story]
     @Environment(\.storyListType) var listType
-    @State private var alertPresented: Bool = false
-    @State private var errorMessage: String = ""
 
     var body: some View {
-        VStack {
-            switch viewModel.stories {
-            case .loading, .error:
-                StoryListContent(title: title) {
-                    LoadingListView()
+        if stories.isEmpty {
+            StoryListContent(title: title) {
+                LoadingListView()
+            }
+            .scrollDisabled(true)
+        } else {
+            StoryListContent(title: title) {
+                ForEach(stories) { story in
+                    NavigationLink(value: story) {
+                        StoryCardView(story: story)
+                    }.buttonStyle(.plain)
                 }
-                .scrollDisabled(true)
-            case .empty:
-                EmptyView()
-            case let .loaded(stories):
-                StoryListContent(title: title) {
-                    ForEach(stories) { story in
-                        NavigationLink(value: story) {
-                            StoryCardView(story: story)
-                        }.buttonStyle(.plain)
-                    }
-                }
-                .scrollIndicators(.hidden)
             }
-        }
-        .alert("Error", isPresented: $alertPresented) {
-            Button("Retry") {
-                alertPresented = false
-                viewModel.fetchStories()
-            }
-        } message: {
-            Text(errorMessage)
-        }
-        .onChange(of: viewModel.stories) {
-            if case let .error(error) = viewModel.stories {
-                errorMessage = error.localizedDescription
-                alertPresented = true
-            } else {
-                errorMessage = ""
-                alertPresented = false
-            }
-        }
-        .navigationDestination(for: Story.self) { story in
-            StoryDetailView(viewModel: viewModel.makeStoryDetailViewModel(for: story))
-        }
-        .onAppear {
-            viewModel.fetchStories()
+            .scrollIndicators(.hidden)
         }
     }
 }
 
 #if DEBUG
-@MainActor
-private struct StoryListPreview: View {
-    let state: Loadable<[Story]>
-
-    var body: some View {
-        let storiesRepository = StoriesRepositoryStub(state: state)
-        let viewModel = StoriesViewModel(filter: .all, storiesRepository: storiesRepository)
-        NavigationStack {
-            StoryListView(title: "Browse Stories")
-                .environmentObject(viewModel)
-                .environmentObject(AudioViewModel(audioPlayer: .init()))
-                .environment(\.storyListType, .grid)
-        }
+#Preview("Loaded") {
+    NavigationStack {
+        StoryListView(title: "Browse Stories", stories: Story.testData)
+            .environmentObject(AudioViewModel(audioPlayer: .init()))
+            .environment(\.storyListType, .grid)
     }
 }
 
-#Preview("Loaded") {
-    StoryListPreview(state: .loaded([Story.testData[0]]))
-}
-
 #Preview("Loading") {
-    StoryListPreview(state: .loading)
+    NavigationStack {
+        StoryListView(title: "Browse Stories", stories: [])
+            .environmentObject(AudioViewModel(audioPlayer: .init()))
+            .environment(\.storyListType, .grid)
+    }
 }
-
-#Preview("Error") {
-    StoryListPreview(state: .error)
-}
-
 #endif
